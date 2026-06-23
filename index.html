@@ -1,38 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Family Finance Dashboard</title>
+    <title>Family Finance</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>💰 Family Finance Dashboard</h1>
-
-<div class="dashboard">
-
-<div class="card">
-<h3>Total Income</h3>
-<p id="income">₹80,000</p>
+<div class="header">
+    ☰ Family Finance
 </div>
 
-<div class="card">
-<h3>Total Expense</h3>
-<p id="expense">₹25,000</p>
+<div class="balance-card">
+    <h3>Current Balance</h3>
+    <h1>₹55,000</h1>
 </div>
 
-<div class="card">
-<h3>Balance</h3>
-<p id="balance">₹55,000</p>
+<div class="cards">
+
+    <div class="mini-card income">
+        <h4>Income</h4>
+        <h2>₹80,000</h2>
+    </div>
+
+    <div class="mini-card expense">
+        <h4>Expense</h4>
+        <h2>₹25,000</h2>
+    </div>
+
+</div>
+
+<div class="section">
+
+<h3>Recent Transactions</h3>
+
+<div class="transaction">
+    ⛽ Fuel
+    <span>₹1,000</span>
+</div>
+
+<div class="transaction">
+    🥬 Grocery
+    <span>₹500</span>
+</div>
+
+<div class="transaction">
+    💊 Medical
+    <span>₹300</span>
 </div>
 
 </div>
 
-<br>
+<div class="bottom-nav">
 
-<button onclick="window.location.href='add.html'">
-➕ Add Transaction
-</button>
+<a href="index.html">🏠 Home</a>
+
+<a href="add.html">➕ Add</a>
+
+<a href="transactions.html">📋 Transactions</a>
+
+<a href="reports.html">📊 Reports</a>
+
+</div>
 
 <script src="app.js"></script>
 

@@ -1,51 +1,84 @@
 body{
+    margin:0;
     font-family:'Segoe UI',sans-serif;
     background:#f5f7fb;
-    margin:0;
-    padding:30px;
+    padding-bottom:80px;
 }
 
-.container{
-    max-width:600px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-
-h1{
-    text-align:center;
-    color:#1f2937;
-}
-
-label{
-    display:block;
-    margin-top:15px;
-    margin-bottom:5px;
-    font-weight:600;
-}
-
-input,select{
-    width:100%;
-    padding:12px;
-    border:1px solid #d1d5db;
-    border-radius:10px;
-    box-sizing:border-box;
-}
-
-button{
-    margin-top:20px;
-    width:100%;
-    padding:14px;
-    background:#2563eb;
+.header{
+    background:#1e293b;
     color:white;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    cursor:pointer;
+    padding:18px;
+    font-size:22px;
+    font-weight:bold;
 }
 
-button:hover{
-    background:#1d4ed8;
+.balance-card{
+    margin:15px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    padding:25px;
+    border-radius:20px;
+}
+
+.balance-card h3{
+    margin:0;
+}
+
+.balance-card h1{
+    margin-top:10px;
+    font-size:40px;
+}
+
+.cards{
+    display:flex;
+    gap:10px;
+    margin:15px;
+}
+
+.mini-card{
+    flex:1;
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.income{
+    border-left:5px solid green;
+}
+
+.expense{
+    border-left:5px solid red;
+}
+
+.section{
+    margin:15px;
+}
+
+.transaction{
+    background:white;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    display:flex;
+    justify-content:space-between;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    padding:15px 0;
+    box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.bottom-nav a{
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
 }
