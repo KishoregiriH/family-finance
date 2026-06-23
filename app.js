@@ -1,4 +1,8 @@
-async function loadDashboard() {
+if(localStorage.getItem("financeLogin")!="true"){
+
+window.location.href="login.html";
+
+}async function loadDashboard() {
 
     try {
 
