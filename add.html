@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Transaction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>➕ Add Transaction</h1>
+
+<form>
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Person</label>
+<select id="person">
+    <option>Kishore</option>
+    <option>Wife</option>
+</select>
+
+<label>Type</label>
+<select id="type">
+    <option>Income</option>
+    <option>Expense</option>
+    <option>Investment</option>
+    <option>EMI</option>
+</select>
+
+<label>Category</label>
+<select id="category">
+    <option>Salary</option>
+    <option>Grocery</option>
+    <option>Fuel</option>
+    <option>Shopping</option>
+    <option>Dining</option>
+    <option>Medical</option>
+    <option>Investment</option>
+    <option>EMI</option>
+</select>
+
+<label>Amount</label>
+<input type="number" id="amount">
+
+<label>Description</label>
+<input type="text" id="description">
+
+<br><br>
+
+<button type="button" onclick="saveTransaction()">
+Save Transaction
+</button>
+
+</form>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
