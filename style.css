@@ -82,3 +82,20 @@ body{
     color:#333;
     font-size:14px;
 }
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#1e293b;
+    color:white;
+    padding:10px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
