@@ -1,76 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Family Finance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="header">
-    ☰ Family Finance
-</div>
-
-<div class="balance-card">
-    <h3>Current Balance</h3>
-    <h1><h1 id="balance">₹0</h1></h1>
-</div>
-
-<div class="cards">
-
-    <div class="mini-card income">
-        <h4>Income</h4>
-        <h2><h2 id="income">₹0</h2></h2>
+    <div class="header">
+        ☰ Family Finance
     </div>
 
-    <div class="mini-card expense">
-        <h4>Expense</h4>
-        <h2><h2 id="expense">₹0</h2></h2>
+    <div class="balance-card">
+        <h3>Current Balance</h3>
+        <h1 id="balance">₹0</h1>
     </div>
 
-</div>
+    <div class="cards">
 
-<div class="section">
+        <div class="mini-card income">
+            <h4>Income</h4>
+            <h2 id="income">₹0</h2>
+        </div>
 
-<h3>Recent Transactions</h3>
+        <div class="mini-card expense">
+            <h4>Expense</h4>
+            <h2 id="expense">₹0</h2>
+        </div>
 
-<div class="transaction">
-    ⛽ Fuel
-    <span>₹1,000</span>
-</div>
+        <div class="mini-card saving">
+            <h4>Saving</h4>
+            <h2 id="saving">₹0</h2>
+        </div>
 
-<div class="transaction">
-    🥬 Grocery
-    <span>₹500</span>
-</div>
+    </div>
 
-<div class="transaction">
-    💊 Medical
-    <span>₹300</span>
-</div>
+    <div class="section">
 
-</div>
+        <h3>Recent Transactions</h3>
 
-<div class="bottom-nav">
+        <div class="transaction">
+            <span>⛽ Fuel</span>
+            <span>₹1,000</span>
+        </div>
 
-<a href="index.html">🏠 Home</a>
+        <div class="transaction">
+            <span>🥬 Grocery</span>
+            <span>₹500</span>
+        </div>
 
-<a href="add.html">➕ Add</a>
+        <div class="transaction">
+            <span>💊 Medical</span>
+            <span>₹300</span>
+        </div>
 
-<a href="transactions.html">📋 Transactions</a>
+    </div>
 
-<a href="reports.html">📊 Reports</a>
+    <div class="bottom-nav">
+        <a href="index.html">🏠 Home</a>
+        <a href="add.html">➕ Add</a>
+        <a href="transactions.html">📋 Transactions</a>
+        <a href="reports.html">📊 Reports</a>
+    </div>
 
-</div>
-
-<script src="app.js"></script>
-
-<div class="mini-card">
-
-<h4>Saving</h4>
-
-<h2 id="saving">₹0</h2>
-
-</div>
+    <script src="app.js"></script>
 
 </body>
 </html>
