@@ -1,0 +1,32 @@
+async function saveTransaction(){
+
+    const transaction = {
+        person: document.getElementById("person").value,
+        type: document.getElementById("type").value,
+        category: document.getElementById("category").value,
+        amount: document.getElementById("amount").value,
+        description: document.getElementById("description").value
+    };
+
+    try {
+
+        const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec",
+        {
+            method: "POST",
+            body: JSON.stringify(transaction)
+        });
+
+        const result = await response.json();
+
+        if(result.status === "success"){
+            alert("✅ Transaction Saved");
+        } else {
+            alert("❌ Failed");
+        }
+
+    } catch(error){
+        console.error(error);
+        alert("❌ Error Saving Transaction");
+    }
+}
