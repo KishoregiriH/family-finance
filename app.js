@@ -1,22 +1,26 @@
-console.log("Family Finance Started");
-
 function saveTransaction(){
 
-let date = document.getElementById("date").value;
-let person = document.getElementById("person").value;
-let type = document.getElementById("type").value;
-let category = document.getElementById("category").value;
-let amount = document.getElementById("amount").value;
-let description = document.getElementById("description").value;
+let transaction = {
+    date: document.getElementById("date").value,
+    person: document.getElementById("person").value,
+    type: document.getElementById("type").value,
+    category: document.getElementById("category").value,
+    amount: document.getElementById("amount").value,
+    description: document.getElementById("description").value
+};
 
-console.log({
-    date,
-    person,
-    type,
-    category,
-    amount,
-    description
-});
+let transactions =
+JSON.parse(localStorage.getItem("transactions")) || [];
 
-alert("Transaction Saved");
+transactions.push(transaction);
+
+localStorage.setItem(
+    "transactions",
+    JSON.stringify(transactions)
+);
+
+alert("Transaction Saved Successfully");
+
+console.log(transactions);
+
 }
