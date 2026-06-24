@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Financial Dashboard</title>
+<title>Kishore & Darshini Financial Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
-
 <body>
 
 <div class="login-container">
 
     <div class="login-card">
 
-        <h1>💰</h1>
+        <div class="logo">
+            💰
+        </div>
 
         <h2>Kishore & Darshini</h2>
 
@@ -24,8 +25,15 @@
         <label>Select User</label>
 
         <select id="user">
-            <option value="Kishore">Kishore</option>
-            <option value="Darshini">Darshini</option>
+
+            <option value="Kishore">
+                Kishore
+            </option>
+
+            <option value="Darshini">
+                Darshini
+            </option>
+
         </select>
 
         <label>Password</label>
@@ -51,19 +59,43 @@
 
 </div>
 
+<div id="welcomePopup" class="welcome-popup">
+
+    <div class="welcome-card">
+
+        <h2 id="welcomeText">
+        </h2>
+
+        <p>
+            Let's manage your finances wisely today.
+        </p>
+
+        <div class="loading-text">
+            Loading Dashboard...
+        </div>
+
+    </div>
+
+</div>
+
 <script>
 
 function togglePassword(){
 
-    const pwd =
+    let pwd =
     document.getElementById("password");
 
     if(pwd.type==="password"){
+
         pwd.type="text";
+
     }
     else{
+
         pwd.type="password";
+
     }
+
 }
 
 function login(){
@@ -89,8 +121,7 @@ function login(){
             "true"
         );
 
-        window.location.href =
-        "index.html";
+        showWelcome("Kishore");
 
     }
 
@@ -109,8 +140,7 @@ function login(){
             "true"
         );
 
-        window.location.href =
-        "index.html";
+        showWelcome("Darshini");
 
     }
 
@@ -121,6 +151,27 @@ function login(){
         );
 
     }
+
+}
+
+function showWelcome(user){
+
+    document.getElementById(
+        "welcomeText"
+    ).innerHTML =
+    "❤️ Welcome Back " + user;
+
+    document.getElementById(
+        "welcomePopup"
+    ).style.display =
+    "flex";
+
+    setTimeout(function(){
+
+        window.location.href =
+        "index.html";
+
+    },2000);
 
 }
 
