@@ -1,47 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Finance Login</title>
+<title>Login - Financial Dashboard</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<div class="login-box">
+<div class="login-container">
 
-<h1>💰 Family Finance</h1>
+    <div class="login-card">
 
-<input type="text" id="username" placeholder="Username">
+        <h1>💰</h1>
 
-<input type="password" id="password" placeholder="Password">
+        <h2>Kishore & Darshini</h2>
 
-<button onclick="login()">
-Login
-</button>
+        <p>Financial Dashboard</p>
+
+        <label>Select User</label>
+
+        <select id="user">
+            <option value="Kishore">Kishore</option>
+            <option value="Darshini">Darshini</option>
+        </select>
+
+        <label>Password</label>
+
+        <div class="password-box">
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter Password">
+
+            <span onclick="togglePassword()">
+                👁️
+            </span>
+
+        </div>
+
+        <button onclick="login()">
+            Login
+        </button>
+
+    </div>
 
 </div>
 
 <script>
 
+function togglePassword(){
+
+    const pwd =
+    document.getElementById("password");
+
+    if(pwd.type==="password"){
+        pwd.type="text";
+    }
+    else{
+        pwd.type="password";
+    }
+}
+
 function login(){
 
-let user = document.getElementById("username").value;
-let pass = document.getElementById("password").value;
+    let user =
+    document.getElementById("user").value;
 
-if(user=="kishore" && pass=="1234"){
+    let password =
+    document.getElementById("password").value;
 
-localStorage.setItem("financeLogin","true");
+    if(
+        user==="Kishore" &&
+        password==="1998"
+    ){
 
-window.location.href="index.html";
+        localStorage.setItem(
+            "currentUser",
+            "Kishore"
+        );
 
-}
-else{
+        localStorage.setItem(
+            "financeLogin",
+            "true"
+        );
 
-alert("Invalid Login");
+        window.location.href =
+        "index.html";
 
-}
+    }
+
+    else if(
+        user==="Darshini" &&
+        password==="2000"
+    ){
+
+        localStorage.setItem(
+            "currentUser",
+            "Darshini"
+        );
+
+        localStorage.setItem(
+            "financeLogin",
+            "true"
+        );
+
+        window.location.href =
+        "index.html";
+
+    }
+
+    else{
+
+        alert(
+            "Invalid Password"
+        );
+
+    }
 
 }
 
