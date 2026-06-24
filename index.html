@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- LOADING SCREEN (skipped after login, shown on home nav) -->
 <div id="loadingScreen" class="loading-screen">
   <div class="loader"></div>
   <h3>LOADING DASHBOARD...</h3>
@@ -31,17 +31,17 @@
   <p>Here's your financial overview</p>
 </div>
 
-<!-- BALANCE ROW (3 columns) -->
+<!-- BALANCE ROW -->
 <div class="balance-row">
   <div class="balance-card user1">
     <div class="bal-label">BALANCE</div>
-    <div class="bal-name" id="bal-name1">Kishore</div>
+    <div class="bal-name" id="bal-name1">—</div>
     <div class="bal-amount" id="balance1">₹0</div>
   </div>
   <div class="balance-card user2">
     <div class="bal-label">BALANCE</div>
-    <div class="bal-name" id="bal-name2">Darshini</div>
-    <div class="bal-amount" id="balance2">₹—</div>
+    <div class="bal-name" id="bal-name2">—</div>
+    <div class="bal-amount" id="balance2">₹0</div>
   </div>
   <div class="balance-card combined">
     <div class="bal-label">BALANCE</div>
@@ -54,7 +54,6 @@
 <div class="section-title">📊 Summary Overview</div>
 
 <div class="summary-table">
-  <!-- Header -->
   <div class="st-header">
     <div>Person</div>
     <div>📈 Income</div>
@@ -62,37 +61,37 @@
     <div>🏦 Saving</div>
   </div>
 
-  <!-- Row 1: Logged-in user -->
+  <!-- Row 1: logged-in user -->
   <div class="st-row">
     <div class="st-label">
-      <div class="avatar av-blue" id="avatar1">K</div>
-      <span id="row1name">Kishore</span>
+      <div class="avatar av-blue" id="avatar1">—</div>
+      <span id="row1name">—</span>
     </div>
-    <div class="st-cell income" id="r1income">₹0</div>
+    <div class="st-cell income"  id="r1income">₹0</div>
     <div class="st-cell expense" id="r1expense">₹0</div>
-    <div class="st-cell saving" id="r1saving">₹0</div>
+    <div class="st-cell saving"  id="r1saving">₹0</div>
   </div>
 
-  <!-- Row 2: Other user -->
+  <!-- Row 2: other user -->
   <div class="st-row">
     <div class="st-label">
-      <div class="avatar av-cyan" id="avatar2">D</div>
-      <span id="row2name">Darshini</span>
+      <div class="avatar av-cyan" id="avatar2">—</div>
+      <span id="row2name">—</span>
     </div>
-    <div class="st-cell income" id="r2income">₹—</div>
-    <div class="st-cell expense" id="r2expense">₹—</div>
-    <div class="st-cell saving" id="r2saving">₹—</div>
+    <div class="st-cell income"  id="r2income">₹0</div>
+    <div class="st-cell expense" id="r2expense">₹0</div>
+    <div class="st-cell saving"  id="r2saving">₹0</div>
   </div>
 
-  <!-- Row 3: Combined -->
+  <!-- Row 3: combined -->
   <div class="st-row combined-row">
     <div class="st-label">
       <div class="avatar av-green">F</div>
       <span>Family</span>
     </div>
-    <div class="st-cell income" id="r3income">₹0</div>
+    <div class="st-cell income"  id="r3income">₹0</div>
     <div class="st-cell expense" id="r3expense">₹0</div>
-    <div class="st-cell saving" id="r3saving">₹0</div>
+    <div class="st-cell saving"  id="r3saving">₹0</div>
   </div>
 </div>
 
@@ -101,7 +100,9 @@
   <h3>🕐 Recent Transactions</h3>
   <a href="transactions.html">View All →</a>
 </div>
-<div id="recentTransactions"></div>
+<div id="recentTransactions">
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:14px;">Loading...</div>
+</div>
 
 <!-- LOGOUT POPUP -->
 <div id="logoutPopup" class="logout-popup">
@@ -118,18 +119,10 @@
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <a href="index.html" class="active">
-    <span class="nav-icon">🏠</span>Home
-  </a>
-  <a href="add.html">
-    <span class="nav-icon">➕</span>Add
-  </a>
-  <a href="transactions.html">
-    <span class="nav-icon">📋</span>Transactions
-  </a>
-  <a href="reports.html">
-    <span class="nav-icon">📊</span>Reports
-  </a>
+  <a href="index.html" class="active"><span class="nav-icon">🏠</span>Home</a>
+  <a href="add.html"><span class="nav-icon">➕</span>Add</a>
+  <a href="transactions.html"><span class="nav-icon">📋</span>Transactions</a>
+  <a href="reports.html"><span class="nav-icon">📊</span>Reports</a>
 </div>
 
 <script src="app.js"></script>

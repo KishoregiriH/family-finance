@@ -1,24 +1,42 @@
-// LOGIN CHECK
+// ── LOGIN CHECK ──
 if(localStorage.getItem("financeLogin") !== "true"){
   window.location.href = "login.html";
 }
 
-// DASHBOARD LOAD
+// ── ON LOAD ──
 window.onload = async function(){
+  handleLoadingScreen();
   showUserInfo();
-  await loadDashboard();
-  hideLoading();
+  await loadAllData();
 };
 
-// SHOW USER INFO
-function showUserInfo(){
-  const currentUser = localStorage.getItem("currentUser");
-  const otherUser = currentUser === "Kishore" ? "Darshini" : "Kishore";
+// ── LOADING SCREEN ──
+// Skip loading screen if coming from login (skipLoading flag set)
+// Show it normally when navigating from other pages (Home button)
+function handleLoadingScreen(){
+  const skip = localStorage.getItem("skipLoading");
+  if(skip === "true"){
+    // Coming from login — hide immediately, clear flag
+    document.getElementById("loadingScreen").style.display = "none";
+    localStorage.removeItem("skipLoading");
+  }
+  // else: loading screen stays visible until hideLoading() is called after data loads
+}
 
-  // Avatar initials
+function hideLoading(){
+  const ls = document.getElementById("loadingScreen");
+  if(ls) ls.style.display = "none";
+}
+
+// ── USER INFO ──
+const currentUser = localStorage.getItem("currentUser");
+const otherUser   = currentUser === "Kishore" ? "Darshini" : "Kishore";
+
+function showUserInfo(){
+  // Avatars & names
   if(document.getElementById("avatar1")){
-    document.getElementById("avatar1").textContent = currentUser.charAt(0);
-    document.getElementById("avatar2").textContent = otherUser.charAt(0);
+    document.getElementById("avatar1").textContent  = currentUser.charAt(0);
+    document.getElementById("avatar2").textContent  = otherUser.charAt(0);
     document.getElementById("row1name").textContent = currentUser;
     document.getElementById("row2name").textContent = otherUser;
     document.getElementById("bal-name1").textContent = currentUser;
@@ -30,92 +48,134 @@ function showUserInfo(){
     const hour = new Date().getHours();
     let greeting = "Good Morning";
     if(hour >= 12 && hour < 17) greeting = "Good Afternoon";
-    else if(hour >= 17) greeting = "Good Evening";
-    document.getElementById("welcomeUser").innerHTML = "👋 " + greeting + ", " + currentUser;
+    else if(hour >= 17)         greeting = "Good Evening";
+    document.getElementById("welcomeUser").innerHTML =
+      "👋 " + greeting + ", " + currentUser;
   }
 }
 
-// LOAD DASHBOARD DATA
-async function loadDashboard(){
+// ── CALCULATE TOTALS FROM TRANSACTIONS ──
+function calcTotals(transactions, person){
+  const rows = person
+    ? transactions.filter(t => t.person === person)
+    : transactions;
+
+  let income = 0, expense = 0, saving = 0;
+  rows.forEach(t => {
+    const amt = Number(t.amount) || 0;
+    const type = (t.type || "").toLowerCase();
+    if(type === "income")       income  += amt;
+    else if(type === "expense") expense += amt;
+    else if(type === "saving")  saving  += amt;
+  });
+  const balance = income - expense - saving;
+  return { income, expense, saving, balance };
+}
+
+function fmt(n){
+  return "₹" + Number(n).toLocaleString("en-IN");
+}
+
+// ── LOAD ALL DATA ──
+async function loadAllData(){
   try{
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec"
+      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions"
     );
-    const data = await response.json();
+    const transactions = await response.json();
 
-    const income  = Number(data.income);
-    const expense = Number(data.expense);
-    const saving  = Number(data.saving);
-    const balance = Number(data.balance);
+    // Calculate per-person and combined totals
+    const u1 = calcTotals(transactions, currentUser);
+    const u2 = calcTotals(transactions, otherUser);
+    const all = calcTotals(transactions, null);
 
-    // Balance row
-    document.getElementById("balance1").textContent = "₹" + income.toLocaleString();
-    document.getElementById("balanceCombined").textContent = "₹" + balance.toLocaleString();
+    // ── BALANCE CARDS ──
+    document.getElementById("balance1").textContent       = fmt(u1.balance);
+    document.getElementById("balance2").textContent       = fmt(u2.balance);
+    document.getElementById("balanceCombined").textContent = fmt(all.balance);
 
-    // Summary table — row 1 (logged-in user, live data)
-    document.getElementById("r1income").textContent  = "₹" + income.toLocaleString();
-    document.getElementById("r1expense").textContent = "₹" + expense.toLocaleString();
-    document.getElementById("r1saving").textContent  = "₹" + saving.toLocaleString();
+    // ── SUMMARY TABLE ──
+    // Row 1 — logged-in user
+    document.getElementById("r1income").textContent  = fmt(u1.income);
+    document.getElementById("r1expense").textContent = fmt(u1.expense);
+    document.getElementById("r1saving").textContent  = fmt(u1.saving);
 
-    // Summary table — row 3 (combined, same for now)
-    document.getElementById("r3income").textContent  = "₹" + income.toLocaleString();
-    document.getElementById("r3expense").textContent = "₹" + expense.toLocaleString();
-    document.getElementById("r3saving").textContent  = "₹" + saving.toLocaleString();
+    // Row 2 — other user
+    document.getElementById("r2income").textContent  = fmt(u2.income);
+    document.getElementById("r2expense").textContent = fmt(u2.expense);
+    document.getElementById("r2saving").textContent  = fmt(u2.saving);
 
-    loadRecentTransactions();
-  }
-  catch(error){
-    console.log(error);
+    // Row 3 — family combined
+    document.getElementById("r3income").textContent  = fmt(all.income);
+    document.getElementById("r3expense").textContent = fmt(all.expense);
+    document.getElementById("r3saving").textContent  = fmt(all.saving);
+
+    // ── RECENT TRANSACTIONS (logged-in user only, last 5) ──
+    const myTxns = transactions
+      .filter(t => t.person === currentUser)
+      .slice(-5)
+      .reverse();
+
+    renderRecentTransactions(myTxns);
+
+  } catch(error){
+    console.error(error);
+    document.getElementById("recentTransactions").innerHTML =
+      '<div style="text-align:center;padding:20px;color:#dc2626;font-size:14px;">Could not load data</div>';
+  } finally {
+    hideLoading();
   }
 }
 
-// HIDE LOADING
-function hideLoading(){
-  setTimeout(() => {
-    const ls = document.getElementById("loadingScreen");
-    if(ls) ls.style.display = "none";
-  }, 1000);
+// ── RECENT TRANSACTIONS ──
+const catIcons = {
+  salary:"💰", fuel:"⛽", grocery:"🛒", shopping:"🛍️",
+  dining:"🍽️", medical:"🏥", saving:"🏦", other:"📌"
+};
+
+function formatDate(raw){
+  if(!raw) return "—";
+  const d = new Date(raw);
+  if(isNaN(d)) return raw;
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const yyyy = d.getFullYear();
+  return dd + "-" + mm + "-" + yyyy;
 }
 
-// RECENT TRANSACTIONS
-function loadRecentTransactions(){
+function renderRecentTransactions(txns){
   const container = document.getElementById("recentTransactions");
-  if(!container) return;
-  container.innerHTML = `
-    <div class="transaction-card">
-      <div class="txn-left">
-        <div class="txn-icon">💰</div>
-        <div>
-          <div class="txn-title">Salary</div>
-          <div class="txn-date">Today</div>
+  if(!txns.length){
+    container.innerHTML =
+      '<div style="text-align:center;padding:20px;color:#9ca3af;font-size:14px;">No transactions yet</div>';
+    return;
+  }
+
+  let html = "";
+  txns.forEach(t => {
+    const type    = (t.type || "").toLowerCase();
+    const cat     = (t.category || t.type || "Other").toLowerCase();
+    const icon    = catIcons[cat] || "📌";
+    const amtCls  = type === "income" ? "income" : type === "saving" ? "saving" : "expense";
+    const sign    = type === "income" ? "+" : "-";
+
+    html += `
+      <div class="transaction-card">
+        <div class="txn-left">
+          <div class="txn-icon">${icon}</div>
+          <div>
+            <div class="txn-title">${t.category || t.type || "—"}</div>
+            <div class="txn-date">${formatDate(t.date)}</div>
+          </div>
         </div>
-      </div>
-      <div class="txn-amount income">+₹50,000</div>
-    </div>
-    <div class="transaction-card">
-      <div class="txn-left">
-        <div class="txn-icon">⛽</div>
-        <div>
-          <div class="txn-title">Fuel</div>
-          <div class="txn-date">Yesterday</div>
-        </div>
-      </div>
-      <div class="txn-amount expense">-₹1,000</div>
-    </div>
-    <div class="transaction-card">
-      <div class="txn-left">
-        <div class="txn-icon">🛒</div>
-        <div>
-          <div class="txn-title">Grocery</div>
-          <div class="txn-date">Yesterday</div>
-        </div>
-      </div>
-      <div class="txn-amount expense">-₹2,000</div>
-    </div>
-  `;
+        <div class="txn-amount ${amtCls}">${sign}${fmt(t.amount)}</div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
 }
 
-// LOGOUT
+// ── LOGOUT ──
 function showLogoutPopup(){
   document.getElementById("logoutPopup").style.display = "flex";
 }
@@ -127,5 +187,6 @@ function closeLogoutPopup(){
 function logout(){
   localStorage.removeItem("financeLogin");
   localStorage.removeItem("currentUser");
+  localStorage.removeItem("skipLoading");
   window.location.href = "login.html";
 }

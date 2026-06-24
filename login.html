@@ -61,11 +61,13 @@ function login(){
   if(user === "Kishore" && password === "1998"){
     localStorage.setItem("currentUser","Kishore");
     localStorage.setItem("financeLogin","true");
+    localStorage.setItem("skipLoading","true");
     showWelcome("Kishore");
   }
   else if(user === "Darshini" && password === "2000"){
     localStorage.setItem("currentUser","Darshini");
     localStorage.setItem("financeLogin","true");
+    localStorage.setItem("skipLoading","true");
     showWelcome("Darshini");
   }
   else{
