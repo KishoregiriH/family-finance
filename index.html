@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -11,149 +12,198 @@ content="width=device-width, initial-scale=1.0">
 Kishore & Darshini Financial Dashboard
 </title>
 
-<link rel="stylesheet"
-href="style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<div id="loadingScreen" class="loading-screen">
 
-💰💸💱
-<div>
+    <div class="loader"></div>
 
-    <h2>
-        💰 Kishore & Darshini
-    </h2>
-
-    <p>
-        Financial Dashboard
-    </p>
+    <h3>Loading Dashboard...</h3>
 
 </div>
 
-<div class="profile-menu">
+<div class="dashboard">
 
-    <button
-    class="profile-btn"
-    onclick="toggleProfileMenu()">
+    <!-- HEADER -->
 
-        👤 <span id="loggedUser"></span>
+    <div class="top-header">
 
-    </button>
+        <div class="header-left">
 
-    <div
-    id="profileDropdown"
-    class="dropdown-content">
+            <h1>
+                💰 Kishore & Darshini
+            </h1>
 
-        <div class="dropdown-user">
-
-            Logged In User
+            <p>
+                Financial Dashboard
+            </p>
 
         </div>
 
-        <button
-        class="dropdown-logout"
-        onclick="showLogoutPopup()">
+        <div class="profile-menu">
 
-            ⏻ Logout
+            <button
+            class="profile-btn"
+            onclick="toggleProfileMenu()">
 
-        </button>
+                👤 <span id="loggedUser"></span>
+
+            </button>
+
+            <div
+            id="profileDropdown"
+            class="dropdown-content">
+
+                <div class="dropdown-user">
+
+                    Logged In User
+
+                </div>
+
+                <button
+                class="dropdown-logout"
+                onclick="showLogoutPopup()">
+
+                    ⏻ Logout
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 
-</div>
-💰💸💱
+    <!-- WELCOME -->
 
-</div>
+    <div class="welcome-section">
 
+        <h2 id="welcomeUser">
+            👋 Good Morning
+        </h2>
 
-<div class="balance-card">
+        <p>
+            Here's your financial overview
+        </p>
 
-    <h3>
-        Current Balance
+    </div>
+
+    <!-- BALANCE CARD -->
+
+    <div class="family-balance-card">
+
+        <div>
+
+            <h3>
+                Family Balance
+            </h3>
+
+            <h1 id="balance">
+                ₹0
+            </h1>
+
+            <p>
+                Total Available Balance
+            </p>
+
+        </div>
+
+        <div class="wallet-icon">
+
+            💼
+
+        </div>
+
+    </div>
+
+    <!-- MY SUMMARY -->
+
+    <h3 class="section-title">
+
+        👤 My Summary
+
     </h3>
 
-    <h1 id="balance">
-        ₹0
-    </h1>
+    <div class="summary-grid">
 
-</div>
+        <div class="summary-card income">
 
-<div class="cards">
+            <div class="icon">
+                📈
+            </div>
 
-    <div class="mini-card income">
+            <h4>
+                Income
+            </h4>
 
-        <h4>
-            Income
-        </h4>
+            <h2 id="income">
+                ₹0
+            </h2>
 
-        <h2 id="income">
-            ₹0
-        </h2>
+        </div>
+
+        <div class="summary-card expense">
+
+            <div class="icon">
+                📉
+            </div>
+
+            <h4>
+                Expense
+            </h4>
+
+            <h2 id="expense">
+                ₹0
+            </h2>
+
+        </div>
+
+        <div class="summary-card saving">
+
+            <div class="icon">
+                🏦
+            </div>
+
+            <h4>
+                Saving
+            </h4>
+
+            <h2 id="saving">
+                ₹0
+            </h2>
+
+        </div>
 
     </div>
 
-    <div class="mini-card expense">
+    <!-- RECENT TRANSACTIONS -->
 
-        <h4>
-            Expense
-        </h4>
+    <div class="recent-header">
 
-        <h2 id="expense">
-            ₹0
-        </h2>
+        <h3>
+            Recent Transactions
+        </h3>
+
+        <a href="transactions.html">
+
+            View All →
+
+        </a>
 
     </div>
 
-    <div class="mini-card saving">
-
-        <h4>
-            Saving
-        </h4>
-
-        <h2 id="saving">
-            ₹0
-        </h2>
+    <div id="recentTransactions">
 
     </div>
 
 </div>
 
-<div class="section">
+<!-- LOGOUT POPUP -->
 
-<h3>
-Recent Transactions
-</h3>
-
-<div class="transaction">
-<span>📋 View Transactions</span>
-</div>
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="index.html">
-🏠 Home
-</a>
-
-<a href="add.html">
-➕ Add
-</a>
-
-<a href="transactions.html">
-📋 Transactions
-</a>
-
-<a href="reports.html">
-📊 Reports
-</a>
-
-</div>
-
-<script src="app.js"></script>
 <div
 id="logoutPopup"
 class="logout-popup">
@@ -192,6 +242,54 @@ Logout
 
 </div>
 
+<!-- BOTTOM NAVIGATION -->
+
+<div class="bottom-nav">
+
+<a href="index.html">
+
+🏠
+
+<br>
+
+Home
+
+</a>
+
+<a href="add.html">
+
+➕
+
+<br>
+
+Add
+
+</a>
+
+<a href="transactions.html">
+
+📋
+
+<br>
+
+Transactions
+
+</a>
+
+<a href="reports.html">
+
+📊
+
+<br>
+
+Reports
+
+</a>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
+
 </html>
