@@ -6,98 +6,183 @@
 <title>Add Transaction</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
+<!-- TOP HEADER -->
+<div class="top-header">
+  <div class="header-left">
+    <a href="index.html" class="back-btn">←</a>
+    <div class="header-title">
+      <h1>➕ Add Transaction</h1>
+      <p>Record a new entry</p>
+    </div>
+  </div>
+</div>
 
-<h1>➕ Add Transaction</h1>
+<div class="add-page">
 
-<label>Date</label>
-<input type="date" id="date">
+  <!-- TYPE TOGGLE -->
+  <div class="type-toggle">
+    <button id="btn-income" onclick="setType('Income')" class="active-income">
+      <span class="toggle-emoji">📈</span>Income
+    </button>
+    <button id="btn-expense" onclick="setType('Expense')">
+      <span class="toggle-emoji">📉</span>Expense
+    </button>
+    <button id="btn-saving" onclick="setType('Saving')">
+      <span class="toggle-emoji">🏦</span>Saving
+    </button>
+  </div>
 
-<label>Person</label>
-<select id="person">
-    <option>Kishore</option>
-    <option>Wife</option>
-</select>
+  <!-- AMOUNT -->
+  <div class="amount-card">
+    <label>ENTER AMOUNT</label>
+    <div class="amount-row">
+      <span class="currency">₹</span>
+      <input type="number" id="amount" placeholder="0" inputmode="numeric">
+    </div>
+  </div>
 
-<label>Type</label>
-<select id="type">
-    <option>Income</option>
-    <option>Expense</option>
-    <option>Saving</option>
-</select>
+  <!-- CATEGORY GRID -->
+  <div class="section-title">📂 Category</div>
+  <div class="cat-grid" id="catGrid">
+    <div class="cat-item selected" onclick="selectCat(this,'Salary')">
+      <div class="cat-emoji">💰</div>
+      <div class="cat-name">Salary</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Fuel')">
+      <div class="cat-emoji">⛽</div>
+      <div class="cat-name">Fuel</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Grocery')">
+      <div class="cat-emoji">🛒</div>
+      <div class="cat-name">Grocery</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Shopping')">
+      <div class="cat-emoji">🛍️</div>
+      <div class="cat-name">Shopping</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Dining')">
+      <div class="cat-emoji">🍽️</div>
+      <div class="cat-name">Dining</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Medical')">
+      <div class="cat-emoji">🏥</div>
+      <div class="cat-name">Medical</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Saving')">
+      <div class="cat-emoji">🏦</div>
+      <div class="cat-name">Saving</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Other')">
+      <div class="cat-emoji">📌</div>
+      <div class="cat-name">Other</div>
+    </div>
+  </div>
 
-<label>Category</label>
-<select id="category">
-    <option>Salary</option>
-    <option>Fuel</option>
-    <option>Grocery</option>
-    <option>Shopping</option>
-    <option>Dining</option>
-    <option>Medical</option>
-    <option>Saving</option>
-</select>
+  <!-- DETAILS FORM -->
+  <div class="add-form-card">
+    <div class="field">
+      <label>PERSON</label>
+      <select id="person">
+        <option>Kishore</option>
+        <option>Darshini</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>DATE</label>
+      <input type="date" id="date">
+    </div>
+    <div class="field">
+      <label>DESCRIPTION (optional)</label>
+      <input type="text" id="description" placeholder="Add a note...">
+    </div>
+  </div>
 
-<label>Amount</label>
-<input type="number" id="amount">
-
-<label>Description</label>
-<input type="text" id="description">
-
-<br><br>
-
-<button onclick="saveTransaction()">
-💾 Save Transaction
-</button>
-
-<br><br>
-
-<a href="index.html">🏠 Back to Dashboard</a>
+  <!-- SAVE BUTTON -->
+  <button class="save-btn" onclick="saveTransaction()">💾 Save Transaction</button>
 
 </div>
 
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <a href="index.html"><span class="nav-icon">🏠</span>Home</a>
+  <a href="add.html" class="active"><span class="nav-icon">➕</span>Add</a>
+  <a href="transactions.html"><span class="nav-icon">📋</span>Transactions</a>
+  <a href="reports.html"><span class="nav-icon">📊</span>Reports</a>
+</div>
+
 <script>
+let selectedType = 'Income';
+let selectedCategory = 'Salary';
 
-document.getElementById("date").value =
-new Date().toISOString().split("T")[0];
+document.getElementById("date").value = new Date().toISOString().split("T")[0];
 
-async function saveTransaction(){
-
-    const transaction = {
-        person: document.getElementById("person").value,
-        type: document.getElementById("type").value,
-        category: document.getElementById("category").value,
-        amount: document.getElementById("amount").value,
-        description: document.getElementById("description").value
-    };
-
-    try{
-
-        const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec",
-        {
-            method:"POST",
-            body:JSON.stringify(transaction)
-        });
-
-        const result = await response.json();
-
-        if(result.status=="success"){
-            alert("✅ Transaction Saved");
-        }
-        else{
-            alert("❌ Failed");
-        }
-
-    }
-    catch(error){
-        console.error(error);
-        alert("❌ Error Saving Transaction");
-    }
+// Pre-fill person from logged-in user
+const currentUser = localStorage.getItem("currentUser");
+if(currentUser){
+  const sel = document.getElementById("person");
+  for(let i=0;i<sel.options.length;i++){
+    if(sel.options[i].value === currentUser) sel.selectedIndex = i;
+  }
 }
 
+function setType(type){
+  selectedType = type;
+  document.getElementById('btn-income').className  = type==='Income'  ? 'active-income'  : '';
+  document.getElementById('btn-expense').className = type==='Expense' ? 'active-expense' : '';
+  document.getElementById('btn-saving').className  = type==='Saving'  ? 'active-saving'  : '';
+}
+
+function selectCat(el, name){
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCategory = name;
+}
+
+async function saveTransaction(){
+  const amount = document.getElementById("amount").value;
+  if(!amount || amount <= 0){
+    alert("Please enter a valid amount");
+    return;
+  }
+
+  const transaction = {
+    person: document.getElementById("person").value,
+    type: selectedType,
+    category: selectedCategory,
+    amount: amount,
+    date: document.getElementById("date").value,
+    description: document.getElementById("description").value
+  };
+
+  const saveBtn = document.querySelector(".save-btn");
+  saveBtn.textContent = "Saving...";
+  saveBtn.disabled = true;
+
+  try{
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec",
+      { method:"POST", body:JSON.stringify(transaction) }
+    );
+    const result = await response.json();
+    if(result.status === "success"){
+      alert("✅ Transaction Saved!");
+      document.getElementById("amount").value = "";
+      document.getElementById("description").value = "";
+    } else {
+      alert("❌ Save failed. Try again.");
+    }
+  }
+  catch(error){
+    console.error(error);
+    alert("❌ Error saving. Check connection.");
+  }
+  finally{
+    saveBtn.textContent = "💾 Save Transaction";
+    saveBtn.disabled = false;
+  }
+}
 </script>
 
 </body>

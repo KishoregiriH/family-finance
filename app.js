@@ -1,223 +1,131 @@
 // LOGIN CHECK
-
-if(localStorage.getItem("financeLogin")!="true"){
-
-window.location.href="login.html";
-
+if(localStorage.getItem("financeLogin") !== "true"){
+  window.location.href = "login.html";
 }
 
 // DASHBOARD LOAD
-
 window.onload = async function(){
-
-showUserInfo();
-
-await loadDashboard();
-
-hideLoading();
-
+  showUserInfo();
+  await loadDashboard();
+  hideLoading();
 };
 
-// SHOW USER
-
+// SHOW USER INFO
 function showUserInfo(){
+  const currentUser = localStorage.getItem("currentUser");
+  const otherUser = currentUser === "Kishore" ? "Darshini" : "Kishore";
 
-const currentUser =
-localStorage.getItem("currentUser");
+  // Avatar initials
+  if(document.getElementById("avatar1")){
+    document.getElementById("avatar1").textContent = currentUser.charAt(0);
+    document.getElementById("avatar2").textContent = otherUser.charAt(0);
+    document.getElementById("row1name").textContent = currentUser;
+    document.getElementById("row2name").textContent = otherUser;
+    document.getElementById("bal-name1").textContent = currentUser;
+    document.getElementById("bal-name2").textContent = otherUser;
+  }
 
-if(document.getElementById("loggedUser")){
-
-document.getElementById("loggedUser").innerHTML =
-currentUser;
-
+  // Greeting
+  if(document.getElementById("welcomeUser")){
+    const hour = new Date().getHours();
+    let greeting = "Good Morning";
+    if(hour >= 12 && hour < 17) greeting = "Good Afternoon";
+    else if(hour >= 17) greeting = "Good Evening";
+    document.getElementById("welcomeUser").innerHTML = "👋 " + greeting + ", " + currentUser;
+  }
 }
 
-if(document.getElementById("welcomeUser")){
-
-const hour = new Date().getHours();
-
-let greeting = "Good Morning";
-
-if(hour >= 12 && hour < 17){
-
-greeting = "Good Afternoon";
-
-}
-else if(hour >= 17){
-
-greeting = "Good Evening";
-
-}
-
-document.getElementById("welcomeUser").innerHTML =
-"👋 " + greeting + ", " + currentUser;
-
-}
-
-}
-
-// DASHBOARD API
-
+// LOAD DASHBOARD DATA
 async function loadDashboard(){
+  try{
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec"
+    );
+    const data = await response.json();
 
-try{
+    const income  = Number(data.income);
+    const expense = Number(data.expense);
+    const saving  = Number(data.saving);
+    const balance = Number(data.balance);
 
-const response = await fetch(
-"https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec"
-);
+    // Balance row
+    document.getElementById("balance1").textContent = "₹" + income.toLocaleString();
+    document.getElementById("balanceCombined").textContent = "₹" + balance.toLocaleString();
 
-const data = await response.json();
+    // Summary table — row 1 (logged-in user, live data)
+    document.getElementById("r1income").textContent  = "₹" + income.toLocaleString();
+    document.getElementById("r1expense").textContent = "₹" + expense.toLocaleString();
+    document.getElementById("r1saving").textContent  = "₹" + saving.toLocaleString();
 
-document.getElementById("income").innerHTML =
-"₹" + Number(data.income).toLocaleString();
+    // Summary table — row 3 (combined, same for now)
+    document.getElementById("r3income").textContent  = "₹" + income.toLocaleString();
+    document.getElementById("r3expense").textContent = "₹" + expense.toLocaleString();
+    document.getElementById("r3saving").textContent  = "₹" + saving.toLocaleString();
 
-document.getElementById("expense").innerHTML =
-"₹" + Number(data.expense).toLocaleString();
-
-document.getElementById("saving").innerHTML =
-"₹" + Number(data.saving).toLocaleString();
-
-document.getElementById("balance").innerHTML =
-"₹" + Number(data.balance).toLocaleString();
-
-loadRecentTransactions();
-
+    loadRecentTransactions();
+  }
+  catch(error){
+    console.log(error);
+  }
 }
-catch(error){
 
-console.log(error);
-
-}
-
-}
-
-// LOADING
-
+// HIDE LOADING
 function hideLoading(){
-
-setTimeout(() => {
-
-document.getElementById(
-"loadingScreen"
-).style.display="none";
-
-},1000);
-
+  setTimeout(() => {
+    const ls = document.getElementById("loadingScreen");
+    if(ls) ls.style.display = "none";
+  }, 1000);
 }
 
 // RECENT TRANSACTIONS
-
-async function loadRecentTransactions(){
-
-const container =
-document.getElementById(
-"recentTransactions"
-);
-
-if(!container) return;
-
-container.innerHTML =
-
-`
-<div class="transaction-card">
-<span>💰 Salary</span>
-<span>₹50,000</span>
-</div>
-
-<div class="transaction-card">
-<span>⛽ Fuel</span>
-<span>₹1,000</span>
-</div>
-
-<div class="transaction-card">
-<span>🛒 Grocery</span>
-<span>₹2,000</span>
-</div>
-`;
-
-}
-
-// PROFILE MENU
-
-function toggleProfileMenu(){
-
-const menu =
-document.getElementById(
-"profileDropdown"
-);
-
-if(menu.style.display==="block"){
-
-menu.style.display="none";
-
-}
-else{
-
-menu.style.display="block";
-
-}
-
+function loadRecentTransactions(){
+  const container = document.getElementById("recentTransactions");
+  if(!container) return;
+  container.innerHTML = `
+    <div class="transaction-card">
+      <div class="txn-left">
+        <div class="txn-icon">💰</div>
+        <div>
+          <div class="txn-title">Salary</div>
+          <div class="txn-date">Today</div>
+        </div>
+      </div>
+      <div class="txn-amount income">+₹50,000</div>
+    </div>
+    <div class="transaction-card">
+      <div class="txn-left">
+        <div class="txn-icon">⛽</div>
+        <div>
+          <div class="txn-title">Fuel</div>
+          <div class="txn-date">Yesterday</div>
+        </div>
+      </div>
+      <div class="txn-amount expense">-₹1,000</div>
+    </div>
+    <div class="transaction-card">
+      <div class="txn-left">
+        <div class="txn-icon">🛒</div>
+        <div>
+          <div class="txn-title">Grocery</div>
+          <div class="txn-date">Yesterday</div>
+        </div>
+      </div>
+      <div class="txn-amount expense">-₹2,000</div>
+    </div>
+  `;
 }
 
 // LOGOUT
-
 function showLogoutPopup(){
-
-document.getElementById(
-"profileDropdown"
-).style.display="none";
-
-document.getElementById(
-"logoutPopup"
-).style.display="flex";
-
+  document.getElementById("logoutPopup").style.display = "flex";
 }
 
 function closeLogoutPopup(){
-
-document.getElementById(
-"logoutPopup"
-).style.display="none";
-
+  document.getElementById("logoutPopup").style.display = "none";
 }
 
 function logout(){
-
-localStorage.removeItem(
-"financeLogin"
-);
-
-localStorage.removeItem(
-"currentUser"
-);
-
-window.location.href =
-"login.html";
-
-}
-
-// CLOSE DROPDOWN
-
-window.onclick = function(event){
-
-if(
-!event.target.matches(
-'.profile-btn'
-)
-){
-
-const dropdowns =
-document.getElementsByClassName(
-"dropdown-content"
-);
-
-for(let i=0;i<dropdowns.length;i++){
-
-dropdowns[i].style.display =
-"none";
-
-}
-
-}
-
+  localStorage.removeItem("financeLogin");
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
 }

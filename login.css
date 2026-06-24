@@ -58,8 +58,7 @@ font-weight:600;
 color:#374151;
 }
 
-select,
-input{
+select,input{
 width:100%;
 padding:14px;
 border:1.5px solid #d1d5db;
@@ -70,8 +69,7 @@ background:white;
 color:#111827;
 }
 
-select:focus,
-input:focus{
+select:focus,input:focus{
 border-color:#2563eb;
 }
 
@@ -95,7 +93,7 @@ line-height:1;
 
 .login-btn{
 width:100%;
-background:#2563eb;
+background:linear-gradient(135deg,#2563eb,#4f46e5);
 color:white;
 border:none;
 padding:15px;
@@ -108,7 +106,7 @@ letter-spacing:0.3px;
 }
 
 .login-btn:active{
-background:#1d4ed8;
+opacity:0.9;
 transform:scale(0.99);
 }
 
@@ -119,42 +117,51 @@ color:#6b7280;
 font-size:14px;
 }
 
-/* WELCOME POPUP */
-.welcome-popup{
+/* MERGED WELCOME+LOADING OVERLAY */
+.welcome-overlay{
 display:none;
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.6);
+background:linear-gradient(135deg,#0f172a,#1e293b);
 justify-content:center;
 align-items:center;
+flex-direction:column;
 z-index:9999;
-padding:20px;
+gap:20px;
 }
 
-.welcome-card{
-background:white;
-padding:35px 30px;
-border-radius:20px;
-text-align:center;
-width:100%;
-max-width:320px;
-box-shadow:0 20px 40px rgba(0,0,0,.3);
+.welcome-overlay .welcome-emoji{
+font-size:64px;
+animation:popIn 0.5s ease;
 }
 
-.welcome-card h2{
-font-size:22px;
-color:#111827;
-margin-bottom:10px;
+.welcome-overlay .welcome-name{
+font-size:26px;
+font-weight:700;
+color:white;
 }
 
-.welcome-card p{
-color:#6b7280;
-margin-bottom:16px;
+.welcome-overlay .welcome-sub{
 font-size:15px;
+color:#94a3b8;
+margin-top:-10px;
 }
 
-.loading-text{
-color:#2563eb;
-font-weight:600;
-font-size:14px;
+.welcome-overlay .loader{
+width:50px;
+height:50px;
+border:5px solid rgba(255,255,255,0.2);
+border-top:5px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin-top:10px;
 }
+
+.welcome-overlay .loading-label{
+font-size:13px;
+color:#64748b;
+letter-spacing:1px;
+}
+
+@keyframes spin{100%{transform:rotate(360deg);}}
+@keyframes popIn{0%{transform:scale(0.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
