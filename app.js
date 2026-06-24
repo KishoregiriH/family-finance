@@ -33,3 +33,36 @@ window.location.href="login.html";
 }
 
 window.onload = loadDashboard;
+
+const currentUser =
+localStorage.getItem(
+    "currentUser"
+);
+
+if(
+    document.getElementById(
+        "loggedUser"
+    )
+){
+
+document.getElementById(
+    "loggedUser"
+).innerHTML =
+"👤 " + currentUser;
+
+}
+
+function logout(){
+
+localStorage.removeItem(
+    "financeLogin"
+);
+
+localStorage.removeItem(
+    "currentUser"
+);
+
+window.location.href =
+"login.html";
+
+}

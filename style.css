@@ -467,3 +467,62 @@ font-size:16px;
     }
 
 }
+/* HEADER */
+
+.header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:15px;
+
+background:#1e293b;
+
+color:white;
+
+}
+
+.header h2{
+
+margin:0;
+
+}
+
+.header p{
+
+margin:0;
+
+font-size:12px;
+
+color:#cbd5e1;
+
+}
+
+.user-area{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.logout-btn{
+
+background:red;
+
+color:white;
+
+border:none;
+
+padding:8px 12px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}

@@ -1,70 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Finance Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Kishore & Darshini Financial Dashboard
+</title>
+
+<link rel="stylesheet"
+href="style.css">
+
 </head>
+
 <body>
 
-    <div class="header">
-        ☰ Family Finance
-    </div>
+<div class="header">
 
-    <div class="balance-card">
-        <h3>Current Balance</h3>
-        <h1 id="balance">₹0</h1>
-    </div>
+    <div>
 
-    <div class="cards">
+        <h2>
+            💰 Kishore & Darshini
+        </h2>
 
-        <div class="mini-card income">
-            <h4>Income</h4>
-            <h2 id="income">₹0</h2>
-        </div>
-
-        <div class="mini-card expense">
-            <h4>Expense</h4>
-            <h2 id="expense">₹0</h2>
-        </div>
-
-        <div class="mini-card saving">
-            <h4>Saving</h4>
-            <h2 id="saving">₹0</h2>
-        </div>
+        <p>
+            Financial Dashboard
+        </p>
 
     </div>
 
-    <div class="section">
+    <div class="user-area">
 
-        <h3>Recent Transactions</h3>
+        <span id="loggedUser">
+        </span>
 
-        <div class="transaction">
-            <span>⛽ Fuel</span>
-            <span>₹1,000</span>
-        </div>
+        <button
+        class="logout-btn"
+        onclick="logout()">
 
-        <div class="transaction">
-            <span>🥬 Grocery</span>
-            <span>₹500</span>
-        </div>
+            🚪
 
-        <div class="transaction">
-            <span>💊 Medical</span>
-            <span>₹300</span>
-        </div>
+        </button>
 
     </div>
 
-    <div class="bottom-nav">
-        <a href="index.html">🏠 Home</a>
-        <a href="add.html">➕ Add</a>
-        <a href="transactions.html">📋 Transactions</a>
-        <a href="reports.html">📊 Reports</a>
+</div>
+
+<div class="balance-card">
+
+    <h3>
+        Current Balance
+    </h3>
+
+    <h1 id="balance">
+        ₹0
+    </h1>
+
+</div>
+
+<div class="cards">
+
+    <div class="mini-card income">
+
+        <h4>
+            Income
+        </h4>
+
+        <h2 id="income">
+            ₹0
+        </h2>
+
     </div>
 
-    <script src="app.js"></script>
+    <div class="mini-card expense">
+
+        <h4>
+            Expense
+        </h4>
+
+        <h2 id="expense">
+            ₹0
+        </h2>
+
+    </div>
+
+    <div class="mini-card saving">
+
+        <h4>
+            Saving
+        </h4>
+
+        <h2 id="saving">
+            ₹0
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="section">
+
+<h3>
+Recent Transactions
+</h3>
+
+<div class="transaction">
+<span>📋 View Transactions</span>
+</div>
+
+</div>
+
+<div class="bottom-nav">
+
+<a href="index.html">
+🏠 Home
+</a>
+
+<a href="add.html">
+➕ Add
+</a>
+
+<a href="transactions.html">
+📋 Transactions
+</a>
+
+<a href="reports.html">
+📊 Reports
+</a>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
 </html>
