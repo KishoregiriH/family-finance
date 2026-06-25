@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- TOP HEADER -->
 <div class="top-header">
   <div class="header-left">
     <a href="index.html" class="back-btn">←</a>
@@ -21,7 +20,6 @@
 
 <div class="page-content">
 
-  <!-- FILTER BUTTONS -->
   <div class="filter-bar">
     <button class="filter-btn active" id="btnAll"      onclick="setUserFilter('all')">👥 All</button>
     <button class="filter-btn"        id="btnKishore"  onclick="setUserFilter('Kishore')">👤 Kishore</button>
@@ -29,7 +27,6 @@
     <button class="filter-btn"        id="btnDate"     onclick="toggleDateFilter()">📅 Filter</button>
   </div>
 
-  <!-- DATE FILTER PANEL -->
   <div class="filter-section" id="dateFilterPanel">
     <div class="filter-row">
       <div>
@@ -51,12 +48,10 @@
     <button class="clear-btn"  onclick="clearFilters()">Clear Filter</button>
   </div>
 
-  <!-- TAP HINT -->
   <div style="font-size:11px;color:#9ca3af;margin-bottom:8px;padding-left:4px;">
-    💡 Tap a row to see details
+    💡 Tap row to expand · ✏️ to edit
   </div>
 
-  <!-- TABLE -->
   <div class="txn-table-wrap">
     <table id="transactionTable">
       <thead>
@@ -65,6 +60,7 @@
           <th>Category</th>
           <th>Type</th>
           <th>Amount</th>
+          <th></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -73,7 +69,6 @@
 
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <a href="index.html"><span class="nav-icon">🏠</span>Home</a>
   <a href="add.html"><span class="nav-icon">➕</span>Add</a>
@@ -82,135 +77,129 @@
 </div>
 
 <script>
-// ── LOGIN CHECK ──
-if(localStorage.getItem("financeLogin") !== "true"){
-  window.location.href = "login.html";
-}
+if(localStorage.getItem("financeLogin") !== "true") window.location.href = "login.html";
 
-// ── AUTO LOGOUT ──
-const AUTO_LOGOUT_MS = 60 * 1000;
+// AUTO LOGOUT
+const AUTO_LOGOUT_MS = 60000;
 let autoLogoutTimer = null;
 function resetAutoLogout(){
   clearTimeout(autoLogoutTimer);
   autoLogoutTimer = setTimeout(function(){
-    const banner = document.createElement("div");
-    banner.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
-    banner.textContent = "⏻ Auto-logout: Session expired due to inactivity.";
-    document.body.appendChild(banner);
-    setTimeout(function(){
-      localStorage.removeItem("financeLogin");
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("skipLoading");
-      window.location.href = "login.html";
-    }, 1500);
+    const b = document.createElement("div");
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
+    b.textContent = "Session expired. Logging out...";
+    document.body.appendChild(b);
+    setTimeout(()=>{ localStorage.clear(); window.location.href="login.html"; }, 1500);
   }, AUTO_LOGOUT_MS);
 }
-["click","touchstart","keydown","scroll","mousemove"].forEach(function(evt){
-  document.addEventListener(evt, resetAutoLogout, true);
-});
+["click","touchstart","keydown","scroll","mousemove"].forEach(e => document.addEventListener(e, resetAutoLogout, true));
 resetAutoLogout();
 
-let allData  = [];
+let allData    = [];
 let activeUser = "all";
+
+// ── KEY FIX: normalise Google Sheet column names ──
+function normalise(t){
+  return {
+    person      : t["Person"]         || t["person"]      || "",
+    type        : t["Type"]           || t["type"]        || "",
+    category    : t["Category"]       || t["category"]    || "",
+    amount      : t["Amount"]         || t["amount"]      || 0,
+    date        : t["Date"]           || t["date"]        || "",
+    description : t["Description"]    || t["description"] || "",
+    payment     : t["Payment Method"] || t["payment"]     || t["Payment"] || "",
+    rowNum      : t["_rowNum"]        || t["rowNum"]      || null
+  };
+}
 
 function formatDate(raw){
   if(!raw) return "—";
   const d = new Date(raw);
   if(isNaN(d)) return raw;
-  return String(d.getDate()).padStart(2,"0") + "-" +
-         String(d.getMonth()+1).padStart(2,"0") + "-" +
-         d.getFullYear();
+  return String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();
 }
 
 function typeBadge(type){
-  const t   = (type||"").toLowerCase();
-  const cls = t==="income" ? "income" : t==="saving" ? "saving" : "expense";
-  return `<span class="type-badge ${cls}">${type||"—"}</span>`;
-}
-
-// Support both "payment" and "Payment Method" column names from Google Sheet
-function getPayment(item){
-  return item["Payment Method"] || item["payment"] || item["Payment"] || "";
+  const t = (type||"").toLowerCase();
+  const c = t==="income"?"income":t==="saving"?"saving":"expense";
+  return `<span class="type-badge ${c}">${type||"—"}</span>`;
 }
 
 async function loadTransactions(){
   try{
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions"
-    );
-    allData = await res.json();
+    const res = await fetch("https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions");
+    const raw = await res.json();
+    allData = raw.map(normalise);
     renderTable(allData);
   } catch(e){
     document.querySelector("#transactionTable tbody").innerHTML =
-      '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px;">Could not load transactions</td></tr>';
+      '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">Could not load</td></tr>';
   }
 }
 
 function renderTable(data){
   let html = "";
   if(!data.length){
-    html = '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
+    html = '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
   }
-
   data.forEach((item, idx) => {
-    const pay     = getPayment(item);
-    const desc    = (item.description || item.Description || "").trim();
+    const pay      = item.payment;
+    const desc     = item.description.trim();
     const hasExtra = pay || desc;
+    const chipCol  = item.person === "Kishore" ? "#2563eb" : "#0891b2";
+    const chevron  = hasExtra ? `<span class="row-chevron" id="chev-${idx}">▼</span>` : "";
 
-    const chevron = hasExtra
-      ? `<span class="row-chevron" id="chev-${idx}">▼</span>`
-      : "";
-
-    // Person initial chip colour
-    const chipColor = (item.person||"") === "Kishore" ? "#2563eb" : "#0891b2";
+    // Store item data for edit — encode to JSON in data attribute
+    const encoded = encodeURIComponent(JSON.stringify(item));
 
     html += `
-      <tr class="txn-main-row${hasExtra ? " expandable" : ""}"
-          onclick="${hasExtra ? "toggleDetail(" + idx + ")" : ""}">
+      <tr class="txn-main-row${hasExtra?" expandable":""}" onclick="${hasExtra?"toggleDetail("+idx+")":""}">
         <td>
-          <span class="txn-person-chip" style="background:${chipColor}">
-            ${(item.person||"?").charAt(0)}
-          </span>
+          <span class="txn-person-chip" style="background:${chipCol}">${(item.person||"?").charAt(0)}</span>
           ${formatDate(item.date)}
         </td>
-        <td>${item.category || item.type || "—"}</td>
+        <td>${item.category||item.type||"—"}</td>
         <td>${typeBadge(item.type)}</td>
-        <td style="font-weight:700;white-space:nowrap;">
-          ₹${Number(item.amount||0).toLocaleString("en-IN")}
-          ${chevron}
+        <td style="font-weight:700;white-space:nowrap;">₹${Number(item.amount||0).toLocaleString("en-IN")} ${chevron}</td>
+        <td>
+          <button class="edit-row-btn" onclick="event.stopPropagation();openEdit('${encoded}')" title="Edit">✏️</button>
         </td>
       </tr>`;
-
     if(hasExtra){
       html += `
       <tr class="txn-detail-row" id="detail-${idx}" style="display:none;">
-        <td colspan="4">
+        <td colspan="5">
           <div class="txn-detail-box">
-            ${pay  ? `<div class="detail-chip">💳 <strong>Payment:</strong>&nbsp;${pay}</div>`  : ""}
-            ${desc ? `<div class="detail-chip">📝 <strong>Note:</strong>&nbsp;${desc}</div>` : ""}
+            ${pay  ? `<div class="detail-chip">💳 <strong>Payment:</strong>&nbsp;${pay}</div>` : ""}
+            ${desc ? `<div class="detail-chip">📝 <strong>Note:</strong>&nbsp;${desc}</div>`  : ""}
           </div>
         </td>
       </tr>`;
     }
   });
-
   document.querySelector("#transactionTable tbody").innerHTML = html;
 }
 
 function toggleDetail(idx){
-  const row  = document.getElementById("detail-" + idx);
-  const chev = document.getElementById("chev-"   + idx);
+  const row  = document.getElementById("detail-"+idx);
+  const chev = document.getElementById("chev-"+idx);
   if(!row) return;
   const open = row.style.display !== "none";
   row.style.display = open ? "none" : "table-row";
   if(chev) chev.textContent = open ? "▼" : "▲";
 }
 
+function openEdit(encoded){
+  const item = JSON.parse(decodeURIComponent(encoded));
+  localStorage.setItem("editTransaction", JSON.stringify(item));
+  window.location.href = "edit.html";
+}
+
 function setUserFilter(user){
   activeUser = user;
   ["all","Kishore","Darshini"].forEach(u => {
-    const btn = document.getElementById("btn" + (u==="all" ? "All" : u));
-    if(btn) btn.classList.toggle("active", u === user);
+    const btn = document.getElementById("btn"+(u==="all"?"All":u));
+    if(btn) btn.classList.toggle("active", u===user);
   });
   applyFilters();
 }
@@ -224,15 +213,13 @@ function toggleDateFilter(){
 function applyFilters(){
   let filtered = [...allData];
   if(activeUser !== "all") filtered = filtered.filter(i => i.person === activeUser);
-
   const from  = document.getElementById("fromDate").value;
   const to    = document.getElementById("toDate").value;
   const month = document.getElementById("monthFilter").value;
-
   if(month){
     filtered = filtered.filter(i => {
       const d = new Date(i.date);
-      return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") === month;
+      return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0") === month;
     });
   } else {
     if(from) filtered = filtered.filter(i => new Date(i.date) >= new Date(from));
@@ -243,9 +230,7 @@ function applyFilters(){
 
 function clearFilters(){
   activeUser = "all";
-  document.getElementById("fromDate").value    = "";
-  document.getElementById("toDate").value      = "";
-  document.getElementById("monthFilter").value = "";
+  ["fromDate","toDate","monthFilter"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("btnAll").classList.add("active");
   document.getElementById("btnKishore").classList.remove("active");
   document.getElementById("btnDarshini").classList.remove("active");
@@ -254,6 +239,5 @@ function clearFilters(){
 
 loadTransactions();
 </script>
-
 </body>
 </html>

@@ -8,13 +8,11 @@
 </head>
 <body>
 
-<!-- LOADING SCREEN (skipped after login, shown on home nav) -->
 <div id="loadingScreen" class="loading-screen">
   <div class="loader"></div>
   <h3>LOADING DASHBOARD...</h3>
 </div>
 
-<!-- TOP HEADER -->
 <div class="top-header">
   <div class="header-left">
     <div class="header-title">
@@ -28,13 +26,18 @@
   </button>
 </div>
 
-<!-- WELCOME -->
 <div class="welcome-section">
   <h2 id="welcomeUser">👋 Good Morning</h2>
-  <p>Here's your financial overview</p>
+  <div class="overview-row">
+    <p class="overview-label">Here's your financial overview</p>
+    <div class="date-range-badge">
+      <span id="dashFromDate">—</span>
+      <span class="date-sep">→</span>
+      <span id="dashToDate">—</span>
+    </div>
+  </div>
 </div>
 
-<!-- BALANCE ROW -->
 <div class="balance-row">
   <div class="balance-card user1">
     <div class="bal-label">BALANCE</div>
@@ -53,7 +56,6 @@
   </div>
 </div>
 
-<!-- SUMMARY TABLE -->
 <div class="section-title">📊 Summary Overview</div>
 
 <div class="summary-table">
@@ -63,8 +65,6 @@
     <div>📉 Expense</div>
     <div>🏦 Saving</div>
   </div>
-
-  <!-- Row 1: logged-in user -->
   <div class="st-row">
     <div class="st-label">
       <div class="avatar av-blue" id="avatar1">—</div>
@@ -74,8 +74,6 @@
     <div class="st-cell expense" id="r1expense">₹0</div>
     <div class="st-cell saving"  id="r1saving">₹0</div>
   </div>
-
-  <!-- Row 2: other user -->
   <div class="st-row">
     <div class="st-label">
       <div class="avatar av-cyan" id="avatar2">—</div>
@@ -85,8 +83,6 @@
     <div class="st-cell expense" id="r2expense">₹0</div>
     <div class="st-cell saving"  id="r2saving">₹0</div>
   </div>
-
-  <!-- Row 3: combined -->
   <div class="st-row combined-row">
     <div class="st-label">
       <div class="avatar av-green">F</div>
@@ -98,7 +94,6 @@
   </div>
 </div>
 
-<!-- RECENT TRANSACTIONS -->
 <div class="recent-header">
   <h3>🕐 Recent Transactions</h3>
   <a href="transactions.html">View All →</a>
@@ -107,20 +102,20 @@
   <div style="text-align:center;padding:20px;color:#9ca3af;font-size:14px;">Loading...</div>
 </div>
 
-<!-- LOGOUT POPUP -->
 <div id="logoutPopup" class="logout-popup">
   <div class="logout-card">
-    <div class="logout-icon">⏻</div>
+    <div class="logout-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
     <h3>Logout?</h3>
     <p>Are you sure you want to logout from the dashboard?</p>
     <div class="logout-actions">
-      <button class="cancel-btn" onclick="closeLogoutPopup()">Cancel</button>
+      <button class="cancel-btn"  onclick="closeLogoutPopup()">Cancel</button>
       <button class="confirm-btn" onclick="logout()">Yes, Logout</button>
     </div>
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <a href="index.html" class="active"><span class="nav-icon">🏠</span>Home</a>
   <a href="add.html"><span class="nav-icon">➕</span>Add</a>
