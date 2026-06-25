@@ -70,8 +70,24 @@
       <div class="cat-emoji">🏥</div>
       <div class="cat-name">Medical</div>
     </div>
-    <div class="cat-item" onclick="selectCat(this,'Saving')">
+    <div class="cat-item" onclick="selectCat(this,'Transport')">
+      <div class="cat-emoji">🚌</div>
+      <div class="cat-name">Transport</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Rent')">
+      <div class="cat-emoji">🏠</div>
+      <div class="cat-name">Rent</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Loan')">
       <div class="cat-emoji">🏦</div>
+      <div class="cat-name">Loan</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Sharing')">
+      <div class="cat-emoji">🤝</div>
+      <div class="cat-name">Sharing</div>
+    </div>
+    <div class="cat-item" onclick="selectCat(this,'Saving')">
+      <div class="cat-emoji">💎</div>
       <div class="cat-name">Saving</div>
     </div>
     <div class="cat-item" onclick="selectCat(this,'Other')">
@@ -82,6 +98,20 @@
 
   <!-- DETAILS FORM -->
   <div class="add-form-card">
+    <div class="field">
+      <label>PAYMENT METHOD</label>
+      <div class="payment-toggle">
+        <button id="pay-cash" class="pay-btn active-pay" onclick="setPayment('Cash')">
+          <span>💵</span> Cash
+        </button>
+        <button id="pay-upi" class="pay-btn" onclick="setPayment('UPI')">
+          <span>📱</span> UPI
+        </button>
+        <button id="pay-card" class="pay-btn" onclick="setPayment('Card')">
+          <span>💳</span> Card
+        </button>
+      </div>
+    </div>
     <div class="field">
       <label>PERSON</label>
       <select id="person">
@@ -115,10 +145,10 @@
 <script>
 let selectedType = 'Income';
 let selectedCategory = 'Salary';
+let selectedPayment = 'Cash';
 
 document.getElementById("date").value = new Date().toISOString().split("T")[0];
 
-// Pre-fill person from logged-in user
 const currentUser = localStorage.getItem("currentUser");
 if(currentUser){
   const sel = document.getElementById("person");
@@ -140,6 +170,13 @@ function selectCat(el, name){
   selectedCategory = name;
 }
 
+function setPayment(method){
+  selectedPayment = method;
+  document.getElementById('pay-cash').className = method==='Cash' ? 'pay-btn active-pay' : 'pay-btn';
+  document.getElementById('pay-upi').className  = method==='UPI'  ? 'pay-btn active-pay' : 'pay-btn';
+  document.getElementById('pay-card').className = method==='Card' ? 'pay-btn active-pay' : 'pay-btn';
+}
+
 async function saveTransaction(){
   const amount = document.getElementById("amount").value;
   if(!amount || amount <= 0){
@@ -153,7 +190,8 @@ async function saveTransaction(){
     category: selectedCategory,
     amount: amount,
     date: document.getElementById("date").value,
-    description: document.getElementById("description").value
+    description: document.getElementById("description").value,
+    payment: selectedPayment
   };
 
   const saveBtn = document.querySelector(".save-btn");
@@ -170,6 +208,7 @@ async function saveTransaction(){
       alert("✅ Transaction Saved!");
       document.getElementById("amount").value = "";
       document.getElementById("description").value = "";
+      setPayment('Cash');
     } else {
       alert("❌ Save failed. Try again.");
     }

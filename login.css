@@ -36,15 +36,45 @@ text-align:center;
 margin-bottom:28px;
 }
 
-.logo h1{
-font-size:56px;
-margin-bottom:10px;
+.logo-icon{
+font-size:52px;
+margin-bottom:8px;
+display:block;
+filter:drop-shadow(0 4px 8px rgba(37,99,235,0.3));
 }
 
-.logo p{
-font-size:20px;
+.logo-title{
+font-size:22px;
+font-weight:800;
+background:linear-gradient(135deg,#2563eb,#4f46e5);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+letter-spacing:-0.3px;
+margin-bottom:2px;
+}
+
+.logo-subtitle{
+font-size:13px;
 font-weight:700;
-color:#111827;
+color:#6b7280;
+letter-spacing:3px;
+text-transform:uppercase;
+margin-bottom:12px;
+}
+
+.logo-divider{
+width:40px;
+height:3px;
+background:linear-gradient(135deg,#2563eb,#4f46e5);
+border-radius:2px;
+margin:0 auto 10px;
+}
+
+.logo-tagline{
+font-size:13px;
+color:#9ca3af;
+font-style:italic;
 }
 
 .form-group{

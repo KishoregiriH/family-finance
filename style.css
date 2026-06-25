@@ -788,3 +788,87 @@ box-shadow:0 6px 20px rgba(37,99,235,0.35);
 opacity:0.9;
 transform:scale(0.99);
 }
+
+/* ── PAYMENT METHOD TOGGLE ── */
+.payment-toggle{
+display:flex;
+gap:8px;
+}
+
+.pay-btn{
+flex:1;
+padding:10px 6px;
+border-radius:12px;
+border:2px solid #e5e7eb;
+background:white;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+color:#6b7280;
+transition:all 0.2s;
+}
+
+.pay-btn.active-pay{
+border-color:#2563eb;
+background:#eff6ff;
+color:#2563eb;
+}
+
+/* ── TRANSACTION EXPANDABLE ROWS ── */
+.txn-main-row.expandable{
+cursor:pointer;
+}
+
+.txn-main-row.expandable:active{
+background:#f8fafc;
+}
+
+.txn-person-chip{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:20px;
+height:20px;
+border-radius:50%;
+background:#2563eb;
+color:white;
+font-size:10px;
+font-weight:700;
+margin-right:4px;
+vertical-align:middle;
+}
+
+.row-chevron{
+font-size:10px;
+color:#9ca3af;
+margin-left:4px;
+}
+
+.txn-detail-row td{
+padding:0 !important;
+border-bottom:1px solid #f3f4f6;
+}
+
+.txn-detail-box{
+background:#f8fafc;
+padding:10px 14px;
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+
+.detail-chip{
+background:white;
+border:1px solid #e5e7eb;
+border-radius:20px;
+padding:5px 12px;
+font-size:12px;
+color:#374151;
+display:flex;
+align-items:center;
+gap:4px;
+}
