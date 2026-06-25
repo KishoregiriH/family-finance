@@ -7,53 +7,73 @@
 <link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-.reports-page{ padding:15px; }
+.reports-page{ padding:15px 15px 30px; }
 
-.month-selector{
-display:flex;
-align-items:center;
-gap:10px;
+/* ── FILTER CARD ── */
+.rpt-filter-card{
 background:white;
-border-radius:16px;
-padding:14px 16px;
-box-shadow:0 2px 8px rgba(0,0,0,0.06);
+border-radius:18px;
+padding:16px;
+box-shadow:0 2px 10px rgba(0,0,0,0.07);
 margin-bottom:16px;
 }
 
-.month-selector label{
-font-size:12px;
+.rpt-filter-card h4{
+font-size:13px;
 font-weight:700;
 color:#6b7280;
-letter-spacing:0.3px;
-white-space:nowrap;
+letter-spacing:0.4px;
+margin-bottom:12px;
 }
 
-.month-selector input{
+.rpt-filter-row{
+display:flex;
+gap:10px;
+align-items:flex-end;
+}
+
+.rpt-filter-row .ff{
 flex:1;
+}
+
+.rpt-filter-row label{
+font-size:11px;
+font-weight:700;
+color:#9ca3af;
+display:block;
+margin-bottom:5px;
+letter-spacing:0.3px;
+}
+
+.rpt-filter-row input,
+.rpt-filter-row select{
+width:100%;
+padding:10px 12px;
 border:1.5px solid #e5e7eb;
 border-radius:10px;
-padding:9px 12px;
 font-size:14px;
 outline:none;
 background:white;
 color:#111827;
 }
 
-.month-selector input:focus{ border-color:#2563eb; }
+.rpt-filter-row input:focus,
+.rpt-filter-row select:focus{ border-color:#2563eb; }
 
-.month-selector button{
+.rpt-view-btn{
 background:linear-gradient(135deg,#2563eb,#4f46e5);
 color:white;
 border:none;
 border-radius:10px;
-padding:10px 16px;
+padding:11px 18px;
 font-size:13px;
 font-weight:700;
 cursor:pointer;
 white-space:nowrap;
+align-self:flex-end;
 }
 
-/* STAT CARDS */
+/* ── STAT CARDS ── */
 .stat-row{
 display:grid;
 grid-template-columns:1fr 1fr 1fr;
@@ -64,57 +84,29 @@ margin-bottom:16px;
 .stat-card{
 background:white;
 border-radius:16px;
-padding:14px 10px;
+padding:14px 8px;
 text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
 .stat-card .stat-label{
-font-size:10px;
+font-size:9px;
 font-weight:700;
-letter-spacing:0.5px;
+letter-spacing:0.6px;
 color:#9ca3af;
-margin-bottom:6px;
+margin-bottom:5px;
 }
 
 .stat-card .stat-val{
-font-size:14px;
+font-size:13px;
 font-weight:800;
 }
 
-.stat-card.income .stat-val{ color:#16a34a; }
-.stat-card.expense .stat-val{ color:#dc2626; }
-.stat-card.saving .stat-val{ color:#2563eb; }
+.stat-card.inc .stat-val{ color:#16a34a; }
+.stat-card.exp .stat-val{ color:#dc2626; }
+.stat-card.sav .stat-val{ color:#2563eb; }
 
-/* CHART CARDS */
-.chart-card{
-background:white;
-border-radius:18px;
-padding:18px;
-box-shadow:0 2px 8px rgba(0,0,0,0.06);
-margin-bottom:16px;
-}
-
-.chart-card h4{
-font-size:14px;
-font-weight:700;
-color:#374151;
-margin-bottom:14px;
-display:flex;
-align-items:center;
-gap:6px;
-}
-
-.chart-wrap{
-position:relative;
-width:100%;
-}
-
-.chart-wrap canvas{
-width:100% !important;
-}
-
-/* PERSON COMPARE */
+/* ── PERSON COMPARE ── */
 .person-compare{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -125,45 +117,90 @@ margin-bottom:16px;
 .person-card{
 background:white;
 border-radius:18px;
-padding:16px;
+padding:14px;
 box-shadow:0 2px 8px rgba(0,0,0,0.06);
 }
 
-.person-card .pc-name{
-font-size:13px;
-font-weight:700;
-color:#374151;
-margin-bottom:12px;
+.pc-head{
 display:flex;
 align-items:center;
-gap:6px;
+gap:7px;
+margin-bottom:12px;
 }
 
 .pc-avatar{
 width:28px;height:28px;
 border-radius:50%;
 display:flex;align-items:center;justify-content:center;
-font-size:12px;font-weight:700;color:white;
+font-size:12px;font-weight:800;color:white;flex-shrink:0;
 }
 
 .pc-av-blue{ background:#2563eb; }
 .pc-av-cyan{ background:#0891b2; }
 
-.pc-stat{ margin-bottom:8px; }
-.pc-stat-label{ font-size:10px; color:#9ca3af; font-weight:600; margin-bottom:3px; }
-.pc-stat-bar-wrap{ background:#f3f4f6; border-radius:4px; height:6px; overflow:hidden; margin-bottom:2px; }
-.pc-stat-bar{ height:6px; border-radius:4px; transition:width 0.6s ease; }
-.bar-income{ background:#16a34a; }
-.bar-expense{ background:#dc2626; }
-.bar-saving{ background:#2563eb; }
-.pc-stat-val{ font-size:11px; font-weight:700; color:#374151; }
+.pc-head span{ font-size:13px;font-weight:700;color:#374151; }
 
-/* NO DATA */
+.pc-stat{ margin-bottom:7px; }
+.pc-stat-label{ font-size:9px;color:#9ca3af;font-weight:700;margin-bottom:2px;letter-spacing:0.3px; }
+.pc-bar-wrap{ background:#f3f4f6;border-radius:4px;height:5px;overflow:hidden;margin-bottom:2px; }
+.pc-bar{ height:5px;border-radius:4px;transition:width 0.7s ease; }
+.bar-inc{ background:#16a34a; }
+.bar-exp{ background:#dc2626; }
+.bar-sav{ background:#2563eb; }
+.pc-stat-val{ font-size:11px;font-weight:700;color:#374151; }
+
+/* ── CHART CARDS ── */
+.chart-card{
+background:white;
+border-radius:18px;
+padding:16px;
+box-shadow:0 2px 8px rgba(0,0,0,0.06);
+margin-bottom:16px;
+}
+
+.chart-card h4{
+font-size:13px;font-weight:700;color:#374151;
+margin-bottom:4px;
+display:flex;align-items:center;gap:6px;
+}
+
+.chart-sub{
+font-size:11px;color:#9ca3af;margin-bottom:14px;
+}
+
+.chart-wrap{ position:relative;width:100%; }
+
+/* ── CATEGORY LIST (below cat chart) ── */
+.cat-list{ margin-top:14px; }
+.cat-list-row{
+display:flex;align-items:center;gap:8px;
+margin-bottom:8px;
+}
+.cat-list-name{
+font-size:12px;font-weight:600;color:#374151;
+width:72px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cat-list-bar-wrap{
+flex:1;background:#f3f4f6;border-radius:4px;height:7px;overflow:hidden;
+}
+.cat-list-bar{
+height:7px;border-radius:4px;transition:width 0.7s ease;
+}
+.cat-list-val{
+font-size:11px;font-weight:700;color:#374151;
+min-width:52px;text-align:right;
+}
+
+/* ── NO DATA ── */
 .no-data{
-text-align:center;
-padding:40px 20px;
-color:#9ca3af;
-font-size:14px;
+text-align:center;padding:32px 20px;
+color:#9ca3af;font-size:13px;
+}
+
+/* ── LOADING ── */
+.rpt-loading{
+text-align:center;padding:40px 20px;
+color:#6b7280;font-size:13px;
 }
 </style>
 </head>
@@ -182,40 +219,53 @@ font-size:14px;
 
 <div class="reports-page">
 
-  <!-- MONTH SELECTOR -->
-  <div class="month-selector">
-    <label>📅 Month</label>
-    <input type="month" id="reportMonth">
-    <button onclick="loadReport()">View</button>
+  <!-- FILTER CARD -->
+  <div class="rpt-filter-card">
+    <h4>🔍 FILTER REPORT</h4>
+    <div class="rpt-filter-row">
+      <div class="ff">
+        <label>MONTH</label>
+        <input type="month" id="rptMonth">
+      </div>
+      <div class="ff">
+        <label>PERSON</label>
+        <select id="rptPerson">
+          <option value="all">👥 Both</option>
+          <option value="Kishore">👤 Kishore</option>
+          <option value="Darshini">👤 Darshini</option>
+        </select>
+      </div>
+      <button class="rpt-view-btn" onclick="runReport()">View</button>
+    </div>
   </div>
 
-  <!-- STAT SUMMARY -->
+  <!-- STAT SUMMARY CARDS -->
   <div class="stat-row">
-    <div class="stat-card income">
+    <div class="stat-card inc">
       <div class="stat-label">INCOME</div>
       <div class="stat-val" id="rpt-income">—</div>
     </div>
-    <div class="stat-card expense">
+    <div class="stat-card exp">
       <div class="stat-label">EXPENSE</div>
       <div class="stat-val" id="rpt-expense">—</div>
     </div>
-    <div class="stat-card saving">
+    <div class="stat-card sav">
       <div class="stat-label">SAVING</div>
       <div class="stat-val" id="rpt-saving">—</div>
     </div>
   </div>
 
   <!-- PERSON COMPARISON -->
-  <div class="person-compare">
+  <div class="person-compare" id="personCompare">
     <div class="person-card">
-      <div class="pc-name">
+      <div class="pc-head">
         <div class="pc-avatar pc-av-blue" id="pc-av1">K</div>
         <span id="pc-name1">Kishore</span>
       </div>
       <div id="pc-stats1"></div>
     </div>
     <div class="person-card">
-      <div class="pc-name">
+      <div class="pc-head">
         <div class="pc-avatar pc-av-cyan" id="pc-av2">D</div>
         <span id="pc-name2">Darshini</span>
       </div>
@@ -223,20 +273,24 @@ font-size:14px;
     </div>
   </div>
 
-  <!-- MONTHLY BAR CHART -->
+  <!-- CHART 1: TYPE-WISE BAR — last 6 months -->
   <div class="chart-card">
-    <h4>📈 Monthly Overview (Last 6 Months)</h4>
-    <div class="chart-wrap" style="height:220px;">
-      <canvas id="barChart"></canvas>
+    <h4>📈 Income vs Expense vs Saving</h4>
+    <div class="chart-sub">Last 6 months overview</div>
+    <div class="chart-wrap" style="height:230px;">
+      <canvas id="typeBarChart"></canvas>
     </div>
   </div>
 
-  <!-- CATEGORY PIE CHART -->
+  <!-- CHART 2: CATEGORY-WISE BAR — highest to lowest -->
   <div class="chart-card">
-    <h4>🍩 Expense by Category</h4>
-    <div class="chart-wrap" style="height:240px;">
-      <canvas id="pieChart"></canvas>
+    <h4>📊 Spending by Category</h4>
+    <div class="chart-sub" id="catChartSub">Expenses — highest to lowest</div>
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="catBarChart"></canvas>
     </div>
+    <!-- Mini ranked list below chart -->
+    <div class="cat-list" id="catRankList"></div>
   </div>
 
 </div>
@@ -250,170 +304,292 @@ font-size:14px;
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions";
+// ── LOGIN CHECK ──
+if(localStorage.getItem("financeLogin") !== "true"){
+  window.location.href = "login.html";
+}
+
+// ── AUTO LOGOUT ──
+const AUTO_LOGOUT_MS = 60 * 1000;
+let autoLogoutTimer = null;
+function resetAutoLogout(){
+  clearTimeout(autoLogoutTimer);
+  autoLogoutTimer = setTimeout(function(){
+    const b = document.createElement("div");
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
+    b.textContent = "⏻ Auto-logout: Session expired due to inactivity.";
+    document.body.appendChild(b);
+    setTimeout(function(){
+      localStorage.removeItem("financeLogin");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("skipLoading");
+      window.location.href = "login.html";
+    }, 1500);
+  }, AUTO_LOGOUT_MS);
+}
+["click","touchstart","keydown","scroll","mousemove"].forEach(function(e){
+  document.addEventListener(e, resetAutoLogout, true);
+});
+resetAutoLogout();
+
+// ── CONSTANTS ──
+const API_URL     = "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions";
 const currentUser = localStorage.getItem("currentUser") || "Kishore";
 const otherUser   = currentUser === "Kishore" ? "Darshini" : "Kishore";
 
-// Set default month to current
+// ── SET DEFAULT MONTH TO CURRENT ──
 const now = new Date();
-document.getElementById("reportMonth").value =
+document.getElementById("rptMonth").value =
   now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0");
 
-let barChartInst = null;
-let pieChartInst = null;
-let allData = [];
+let allData      = [];
+let typeBarInst  = null;
+let catBarInst   = null;
 
+// ── HELPERS ──
 function fmt(n){ return "₹" + Number(n).toLocaleString("en-IN"); }
 
 function getYM(dateStr){
-  const d = new Date(dateStr);
-  if(isNaN(d)) return null;
-  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+  // Handle DD-MM-YYYY, MM/DD/YYYY, YYYY-MM-DD, and ISO strings
+  if(!dateStr) return null;
+  let d;
+  // Try ISO / standard parse first
+  d = new Date(dateStr);
+  if(!isNaN(d)) return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+  // Try DD-MM-YYYY
+  const parts = String(dateStr).split(/[-\/]/);
+  if(parts.length === 3){
+    // DD-MM-YYYY
+    d = new Date(parts[2], parts[1]-1, parts[0]);
+    if(!isNaN(d)) return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+  }
+  return null;
+}
+
+function normaliseRow(t){
+  // Normalise field names — Google Sheets may return various capitalisations
+  const r = {};
+  Object.keys(t).forEach(k => { r[k.toLowerCase().trim()] = t[k]; });
+  return {
+    person      : t.person      || t.Person      || "",
+    type        : t.type        || t.Type         || "",
+    category    : t.category    || t.Category     || "",
+    amount      : t.amount      || t.Amount       || 0,
+    date        : t.date        || t.Date         || "",
+    description : t.description || t.Description  || "",
+    payment     : t["Payment Method"] || t.payment || t.Payment || ""
+  };
 }
 
 function calcTotals(rows){
-  let income=0,expense=0,saving=0;
-  rows.forEach(t=>{
-    const a=Number(t.amount)||0;
-    const tp=(t.type||"").toLowerCase();
-    if(tp==="income") income+=a;
-    else if(tp==="expense") expense+=a;
-    else if(tp==="saving") saving+=a;
+  let income=0, expense=0, saving=0;
+  rows.forEach(t => {
+    const a  = Number(t.amount) || 0;
+    const tp = (t.type||"").toLowerCase().trim();
+    if(tp==="income")       income  += a;
+    else if(tp==="expense") expense += a;
+    else if(tp==="saving")  saving  += a;
   });
-  return{income,expense,saving};
+  return { income, expense, saving };
 }
 
+// ── FETCH DATA (cached) ──
 async function fetchData(){
   if(allData.length) return allData;
-  const res = await fetch(API);
-  allData = await res.json();
+  const res  = await fetch(API_URL);
+  const raw  = await res.json();
+  allData    = raw.map(normaliseRow);
   return allData;
 }
 
+// ── RENDER PERSON STATS ──
 function renderPersonStats(containerId, totals, maxVal){
-  const pct = v => maxVal > 0 ? Math.round((v/maxVal)*100) : 0;
+  const pct = v => maxVal > 0 ? Math.min(100, Math.round((v/maxVal)*100)) : 0;
   document.getElementById(containerId).innerHTML = `
     <div class="pc-stat">
       <div class="pc-stat-label">INCOME</div>
-      <div class="pc-stat-bar-wrap"><div class="pc-stat-bar bar-income" style="width:${pct(totals.income)}%"></div></div>
+      <div class="pc-bar-wrap"><div class="pc-bar bar-inc" style="width:${pct(totals.income)}%"></div></div>
       <div class="pc-stat-val">${fmt(totals.income)}</div>
     </div>
     <div class="pc-stat">
       <div class="pc-stat-label">EXPENSE</div>
-      <div class="pc-stat-bar-wrap"><div class="pc-stat-bar bar-expense" style="width:${pct(totals.expense)}%"></div></div>
+      <div class="pc-bar-wrap"><div class="pc-bar bar-exp" style="width:${pct(totals.expense)}%"></div></div>
       <div class="pc-stat-val">${fmt(totals.expense)}</div>
     </div>
     <div class="pc-stat">
       <div class="pc-stat-label">SAVING</div>
-      <div class="pc-stat-bar-wrap"><div class="pc-stat-bar bar-saving" style="width:${pct(totals.saving)}%"></div></div>
+      <div class="pc-bar-wrap"><div class="pc-bar bar-sav" style="width:${pct(totals.saving)}%"></div></div>
       <div class="pc-stat-val">${fmt(totals.saving)}</div>
     </div>`;
 }
 
-async function loadReport(){
-  const month = document.getElementById("reportMonth").value;
-  const data  = await fetchData();
+// ── MAIN REPORT RUNNER ──
+async function runReport(){
+  const month     = document.getElementById("rptMonth").value;   // "2025-06"
+  const personSel = document.getElementById("rptPerson").value;  // "all"|"Kishore"|"Darshini"
 
-  // Filter for selected month
+  const data = await fetchData();
+
+  // Filter by month
   const monthRows = data.filter(t => getYM(t.date) === month);
-  const totals = calcTotals(monthRows);
 
-  // Stat cards
+  // Filter by person
+  const filtered = personSel === "all"
+    ? monthRows
+    : monthRows.filter(t => t.person === personSel);
+
+  const totals = calcTotals(filtered);
+
+  // ── STAT CARDS ──
   document.getElementById("rpt-income").textContent  = fmt(totals.income);
   document.getElementById("rpt-expense").textContent = fmt(totals.expense);
   document.getElementById("rpt-saving").textContent  = fmt(totals.saving);
 
-  // Person avatars/names
-  document.getElementById("pc-av1").textContent  = currentUser.charAt(0);
-  document.getElementById("pc-av2").textContent  = otherUser.charAt(0);
-  document.getElementById("pc-name1").textContent = currentUser;
-  document.getElementById("pc-name2").textContent = otherUser;
+  // ── PERSON COMPARISON (always show both, using monthRows) ──
+  const loginUser = currentUser;
+  const otherU    = otherUser;
+  document.getElementById("pc-av1").textContent   = loginUser.charAt(0);
+  document.getElementById("pc-av2").textContent   = otherU.charAt(0);
+  document.getElementById("pc-name1").textContent = loginUser;
+  document.getElementById("pc-name2").textContent = otherU;
 
-  // Person comparison
-  const t1 = calcTotals(monthRows.filter(t=>t.person===currentUser));
-  const t2 = calcTotals(monthRows.filter(t=>t.person===otherUser));
-  const maxV = Math.max(t1.income,t1.expense,t1.saving,t2.income,t2.expense,t2.saving,1);
+  const t1   = calcTotals(monthRows.filter(t => t.person === loginUser));
+  const t2   = calcTotals(monthRows.filter(t => t.person === otherU));
+  const maxV = Math.max(t1.income, t1.expense, t1.saving,
+                        t2.income, t2.expense, t2.saving, 1);
   renderPersonStats("pc-stats1", t1, maxV);
   renderPersonStats("pc-stats2", t2, maxV);
 
-  // ── BAR CHART: last 6 months ──
-  const months = [];
-  const labels = [];
-  for(let i=5;i>=0;i--){
+  // ── CHART 1: TYPE-WISE BAR — last 6 months (respecting person filter) ──
+  const months6 = [], labels6 = [];
+  for(let i=5; i>=0; i--){
     const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const ym = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
-    months.push(ym);
-    labels.push(d.toLocaleString("default",{month:"short"}));
+    months6.push(d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0"));
+    labels6.push(d.toLocaleString("default",{month:"short"}) + " '" + String(d.getFullYear()).slice(2));
   }
 
-  const barIncome  = months.map(m=>calcTotals(data.filter(t=>getYM(t.date)===m)).income);
-  const barExpense = months.map(m=>calcTotals(data.filter(t=>getYM(t.date)===m)).expense);
-  const barSaving  = months.map(m=>calcTotals(data.filter(t=>getYM(t.date)===m)).saving);
+  const dataFor6 = personSel === "all"
+    ? data
+    : data.filter(t => t.person === personSel);
 
-  if(barChartInst) barChartInst.destroy();
-  barChartInst = new Chart(document.getElementById("barChart"),{
+  const barInc = months6.map(m => calcTotals(dataFor6.filter(t => getYM(t.date)===m)).income);
+  const barExp = months6.map(m => calcTotals(dataFor6.filter(t => getYM(t.date)===m)).expense);
+  const barSav = months6.map(m => calcTotals(dataFor6.filter(t => getYM(t.date)===m)).saving);
+
+  if(typeBarInst) typeBarInst.destroy();
+  typeBarInst = new Chart(document.getElementById("typeBarChart"),{
     type:"bar",
     data:{
-      labels,
+      labels: labels6,
       datasets:[
-        {label:"Income",  data:barIncome,  backgroundColor:"#16a34a", borderRadius:6, borderSkipped:false},
-        {label:"Expense", data:barExpense, backgroundColor:"#dc2626", borderRadius:6, borderSkipped:false},
-        {label:"Saving",  data:barSaving,  backgroundColor:"#2563eb", borderRadius:6, borderSkipped:false}
+        { label:"Income",  data:barInc, backgroundColor:"#16a34a", borderRadius:5, borderSkipped:false },
+        { label:"Expense", data:barExp, backgroundColor:"#dc2626", borderRadius:5, borderSkipped:false },
+        { label:"Saving",  data:barSav, backgroundColor:"#2563eb", borderRadius:5, borderSkipped:false }
       ]
     },
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      plugins:{ legend:{ position:"bottom", labels:{ font:{size:11}, boxWidth:12 } } },
+      plugins:{
+        legend:{ position:"bottom", labels:{ font:{size:11}, boxWidth:10, padding:12 } }
+      },
       scales:{
-        x:{ grid:{display:false}, ticks:{font:{size:11}} },
-        y:{ grid:{color:"#f3f4f6"}, ticks:{ font:{size:10}, callback:v=>"₹"+v.toLocaleString("en-IN") } }
+        x:{ grid:{display:false}, ticks:{font:{size:10}} },
+        y:{
+          grid:{ color:"#f3f4f6" },
+          ticks:{ font:{size:9}, callback: v => "₹"+Number(v).toLocaleString("en-IN") }
+        }
       }
     }
   });
 
-  // ── PIE CHART: category-wise expense for selected month ──
-  const expenseRows = monthRows.filter(t=>(t.type||"").toLowerCase()==="expense");
-  const catMap = {};
-  expenseRows.forEach(t=>{
-    const c = t.category || "Other";
-    catMap[c] = (catMap[c]||0) + (Number(t.amount)||0);
+  // ── CHART 2: CATEGORY-WISE BAR — all types, sorted highest→lowest ──
+  // Build category totals for income, expense, saving separately
+  const catMap = {}; // { catName: { income, expense, saving } }
+  filtered.forEach(t => {
+    const cat = (t.category || t.type || "Other").trim();
+    if(!catMap[cat]) catMap[cat] = { income:0, expense:0, saving:0 };
+    const a  = Number(t.amount) || 0;
+    const tp = (t.type||"").toLowerCase().trim();
+    if(tp==="income")       catMap[cat].income  += a;
+    else if(tp==="expense") catMap[cat].expense += a;
+    else if(tp==="saving")  catMap[cat].saving  += a;
   });
 
-  const catLabels = Object.keys(catMap);
-  const catVals   = Object.values(catMap);
-  const pieColors = ["#2563eb","#dc2626","#16a34a","#f59e0b","#8b5cf6","#0891b2","#f97316","#ec4899","#14b8a6","#6366f1","#84cc16","#ef4444"];
+  // Sort by total (income+expense+saving) descending
+  const catEntries = Object.entries(catMap)
+    .map(([name, v]) => ({ name, total: v.income+v.expense+v.saving, ...v }))
+    .sort((a,b) => b.total - a.total);
 
-  if(pieChartInst) pieChartInst.destroy();
+  document.getElementById("catChartSub").textContent =
+    (personSel==="all" ? "Both" : personSel) + " — all categories, highest to lowest";
 
-  if(!catLabels.length){
-    document.getElementById("pieChart").parentElement.innerHTML =
-      '<div class="no-data">No expense data for this month</div>';
+  if(catBarInst) catBarInst.destroy();
+
+  if(!catEntries.length){
+    document.getElementById("catBarChart").parentElement.innerHTML =
+      '<div class="no-data">No data for selected filters</div>';
+    document.getElementById("catRankList").innerHTML = "";
   } else {
-    pieChartInst = new Chart(document.getElementById("pieChart"),{
-      type:"doughnut",
+    catBarInst = new Chart(document.getElementById("catBarChart"),{
+      type:"bar",
       data:{
-        labels:catLabels,
-        datasets:[{ data:catVals, backgroundColor:pieColors.slice(0,catLabels.length), borderWidth:2, borderColor:"white" }]
+        labels: catEntries.map(e => e.name),
+        datasets:[
+          { label:"Income",  data:catEntries.map(e=>e.income),  backgroundColor:"#16a34a", borderRadius:4, borderSkipped:false },
+          { label:"Expense", data:catEntries.map(e=>e.expense), backgroundColor:"#dc2626", borderRadius:4, borderSkipped:false },
+          { label:"Saving",  data:catEntries.map(e=>e.saving),  backgroundColor:"#2563eb", borderRadius:4, borderSkipped:false }
+        ]
       },
       options:{
+        indexAxis:"y",       // Horizontal bar → categories on Y-axis, amounts on X
         responsive:true,
         maintainAspectRatio:false,
         plugins:{
-          legend:{ position:"bottom", labels:{ font:{size:11}, boxWidth:12 } },
+          legend:{ position:"bottom", labels:{ font:{size:11}, boxWidth:10, padding:10 } },
           tooltip:{
             callbacks:{
-              label: ctx => " " + ctx.label + ": ₹" + ctx.parsed.toLocaleString("en-IN")
+              label: ctx => " " + ctx.dataset.label + ": ₹" + Number(ctx.parsed.x).toLocaleString("en-IN")
             }
           }
+        },
+        scales:{
+          x:{
+            grid:{ color:"#f3f4f6" },
+            ticks:{ font:{size:9}, callback: v => "₹"+Number(v).toLocaleString("en-IN") }
+          },
+          y:{ grid:{display:false}, ticks:{font:{size:11}} }
         }
       }
     });
+
+    // ── RANKED LIST BELOW CHART ──
+    const maxTotal = catEntries[0].total || 1;
+    const colors   = ["#dc2626","#f97316","#f59e0b","#16a34a","#0891b2","#2563eb","#8b5cf6","#ec4899","#14b8a6","#6366f1","#84cc16","#10b981"];
+    let listHtml   = "";
+    catEntries.forEach((e, i) => {
+      const barPct = Math.round((e.total/maxTotal)*100);
+      const color  = colors[i % colors.length];
+      listHtml += `
+        <div class="cat-list-row">
+          <div class="cat-list-name">${e.name}</div>
+          <div class="cat-list-bar-wrap">
+            <div class="cat-list-bar" style="width:${barPct}%;background:${color};"></div>
+          </div>
+          <div class="cat-list-val">${fmt(e.total)}</div>
+        </div>`;
+    });
+    document.getElementById("catRankList").innerHTML = listHtml;
   }
 }
 
-// Auto-load on page open
-loadReport();
+// ── AUTO-RUN ON PAGE OPEN ──
+fetchData().then(() => runReport()).catch(err => {
+  console.error("Report load error:", err);
+  document.getElementById("rpt-income").textContent  = "Err";
+  document.getElementById("rpt-expense").textContent = "Err";
+  document.getElementById("rpt-saving").textContent  = "Err";
+});
 </script>
 
 </body>
