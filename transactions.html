@@ -8,6 +8,7 @@
 </head>
 <body>
 
+<!-- TOP HEADER -->
 <div class="top-header">
   <div class="header-left">
     <a href="index.html" class="back-btn">←</a>
@@ -20,13 +21,15 @@
 
 <div class="page-content">
 
+  <!-- FILTER BUTTONS -->
   <div class="filter-bar">
-    <button class="filter-btn active" id="btnAll"      onclick="setUserFilter('all')">👥 All</button>
-    <button class="filter-btn"        id="btnKishore"  onclick="setUserFilter('Kishore')">👤 Kishore</button>
-    <button class="filter-btn"        id="btnDarshini" onclick="setUserFilter('Darshini')">👤 Darshini</button>
-    <button class="filter-btn"        id="btnDate"     onclick="toggleDateFilter()">📅 Filter</button>
+    <button class="filter-btn active" id="btnAll" onclick="setUserFilter('all')">👥 All</button>
+    <button class="filter-btn" id="btnKishore" onclick="setUserFilter('Kishore')">👤 Kishore</button>
+    <button class="filter-btn" id="btnDarshini" onclick="setUserFilter('Darshini')">👤 Darshini</button>
+    <button class="filter-btn" id="btnDate" onclick="toggleDateFilter()">📅 Date Filter</button>
   </div>
 
+  <!-- DATE FILTER PANEL -->
   <div class="filter-section" id="dateFilterPanel">
     <div class="filter-row">
       <div>
@@ -45,13 +48,10 @@
       </div>
     </div>
     <button class="apply-btn" onclick="applyFilters()">Apply Filter</button>
-    <button class="clear-btn"  onclick="clearFilters()">Clear Filter</button>
+    <button class="clear-btn" onclick="clearFilters()">Clear Filter</button>
   </div>
 
-  <div style="font-size:11px;color:#9ca3af;margin-bottom:8px;padding-left:4px;">
-    💡 Tap row to expand · ✏️ to edit
-  </div>
-
+  <!-- TABLE -->
   <div class="txn-table-wrap">
     <table id="transactionTable">
       <thead>
@@ -60,7 +60,6 @@
           <th>Category</th>
           <th>Type</th>
           <th>Amount</th>
-          <th></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -69,6 +68,7 @@
 
 </div>
 
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <a href="index.html"><span class="nav-icon">🏠</span>Home</a>
   <a href="add.html"><span class="nav-icon">➕</span>Add</a>
@@ -77,106 +77,70 @@
 </div>
 
 <script>
-if(localStorage.getItem("financeLogin") !== "true") window.location.href = "login.html";
+let allData = [];
+let activeUser = 'all';
 
-// AUTO LOGOUT
-const AUTO_LOGOUT_MS = 60000;
-let autoLogoutTimer = null;
-function resetAutoLogout(){
-  clearTimeout(autoLogoutTimer);
-  autoLogoutTimer = setTimeout(function(){
-    const b = document.createElement("div");
-    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
-    b.textContent = "Session expired. Logging out...";
-    document.body.appendChild(b);
-    setTimeout(()=>{ localStorage.clear(); window.location.href="login.html"; }, 1500);
-  }, AUTO_LOGOUT_MS);
-}
-["click","touchstart","keydown","scroll","mousemove"].forEach(e => document.addEventListener(e, resetAutoLogout, true));
-resetAutoLogout();
-
-let allData    = [];
-let activeUser = "all";
-
-// ── KEY FIX: normalise Google Sheet column names ──
-function normalise(t){
-  return {
-    person      : t["Person"]         || t["person"]      || "",
-    type        : t["Type"]           || t["type"]        || "",
-    category    : t["Category"]       || t["category"]    || "",
-    amount      : t["Amount"]         || t["amount"]      || 0,
-    date        : t["Date"]           || t["date"]        || "",
-    description : t["Description"]    || t["description"] || "",
-    payment     : t["Payment Method"] || t["payment"]     || t["Payment"] || "",
-    rowNum      : t["_rowNum"]        || t["rowNum"]      || null
-  };
-}
-
-function formatDate(raw){
-  if(!raw) return "—";
-  const d = new Date(raw);
-  if(isNaN(d)) return raw;
-  return String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();
+function formatDate(rawDate){
+  if(!rawDate) return '—';
+  // Handle various date formats from Google Sheet
+  const d = new Date(rawDate);
+  if(isNaN(d)) return rawDate;
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy = d.getFullYear();
+  return dd + '-' + mm + '-' + yyyy;
 }
 
 function typeBadge(type){
-  const t = (type||"").toLowerCase();
-  const c = t==="income"?"income":t==="saving"?"saving":"expense";
-  return `<span class="type-badge ${c}">${type||"—"}</span>`;
+  const t = (type||'').toLowerCase();
+  let cls = t === 'income' ? 'income' : t === 'saving' ? 'saving' : 'expense';
+  return `<span class="type-badge ${cls}">${type}</span>`;
 }
 
 async function loadTransactions(){
   try{
-    const res = await fetch("https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions");
-    const raw = await res.json();
-    allData = raw.map(normalise);
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions"
+    );
+    allData = await response.json();
     renderTable(allData);
-  } catch(e){
+  }
+  catch(e){
     document.querySelector("#transactionTable tbody").innerHTML =
-      '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">Could not load</td></tr>';
+      '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">Could not load transactions</td></tr>';
   }
 }
 
 function renderTable(data){
-  let html = "";
+  let html = '';
   if(!data.length){
-    html = '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
+    html = '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
   }
   data.forEach((item, idx) => {
-    const pay      = item.payment;
-    const desc     = item.description.trim();
-    const hasExtra = pay || desc;
-    const chipCol  = item.person === "Kishore" ? "#2563eb" : "#0891b2";
-    const chevron  = hasExtra ? `<span class="row-chevron" id="chev-${idx}">▼</span>` : "";
-
-    // Store item data for edit — encode to JSON in data attribute
-    const encoded = encodeURIComponent(JSON.stringify(item));
-
+    const hasExtra = (item.description && item.description.trim()) || item.payment;
+    const chevron = hasExtra ? '<span class="row-chevron" id="chev-'+idx+'">▼</span>' : '';
     html += `
-      <tr class="txn-main-row${hasExtra?" expandable":""}" onclick="${hasExtra?"toggleDetail("+idx+")":""}">
+      <tr class="txn-main-row ${hasExtra ? 'expandable' : ''}" onclick="${hasExtra ? 'toggleDetail('+idx+')' : ''}">
         <td>
-          <div class="txn-date-cell">
-            <div class="txn-person-row">
-              <span class="txn-person-chip" style="background:${chipCol}">${(item.person||"?").charAt(0)}</span>
-              <span style="font-size:10px;color:#9ca3af;">${item.person||""}</span>
-            </div>
-            <span class="txn-date-line">${formatDate(item.date)}</span>
-          </div>
+          <div class="txn-person-chip">${(item.person||'—').charAt(0)}</div>
+          ${formatDate(item.date)}
         </td>
-        <td style="font-size:12px;">${item.category||item.type||"—"}</td>
+        <td>${item.category||item.type||'—'}</td>
         <td>${typeBadge(item.type)}</td>
-        <td>₹${Number(item.amount||0).toLocaleString("en-IN")} ${chevron}</td>
-        <td>
-          <button class="edit-row-btn" onclick="event.stopPropagation();openEdit('${encoded}')" title="Edit">✏️</button>
+        <td style="font-weight:700;">
+          ₹${Number(item.amount).toLocaleString()}
+          ${chevron}
         </td>
       </tr>`;
     if(hasExtra){
+      const desc = item.description && item.description.trim() ? item.description : null;
+      const pay  = item.payment || null;
       html += `
       <tr class="txn-detail-row" id="detail-${idx}" style="display:none;">
-        <td colspan="5">
+        <td colspan="4">
           <div class="txn-detail-box">
-            ${pay  ? `<div class="detail-chip">💳 <strong>Payment:</strong>&nbsp;${pay}</div>` : ""}
-            ${desc ? `<div class="detail-chip">📝 <strong>Note:</strong>&nbsp;${desc}</div>`  : ""}
+            ${pay  ? `<div class="detail-chip">💳 <strong>Payment:</strong> ${pay}</div>` : ''}
+            ${desc ? `<div class="detail-chip">📝 <strong>Note:</strong> ${desc}</div>` : ''}
           </div>
         </td>
       </tr>`;
@@ -186,63 +150,66 @@ function renderTable(data){
 }
 
 function toggleDetail(idx){
-  const row  = document.getElementById("detail-"+idx);
-  const chev = document.getElementById("chev-"+idx);
+  const row  = document.getElementById('detail-' + idx);
+  const chev = document.getElementById('chev-' + idx);
   if(!row) return;
-  const open = row.style.display !== "none";
-  row.style.display = open ? "none" : "table-row";
-  if(chev) chev.textContent = open ? "▼" : "▲";
-}
-
-function openEdit(encoded){
-  const item = JSON.parse(decodeURIComponent(encoded));
-  localStorage.setItem("editTransaction", JSON.stringify(item));
-  window.location.href = "edit.html";
+  const open = row.style.display !== 'none';
+  row.style.display = open ? 'none' : 'table-row';
+  if(chev) chev.textContent = open ? '▼' : '▲';
 }
 
 function setUserFilter(user){
   activeUser = user;
-  ["all","Kishore","Darshini"].forEach(u => {
-    const btn = document.getElementById("btn"+(u==="all"?"All":u));
-    if(btn) btn.classList.toggle("active", u===user);
-  });
+  document.getElementById('btnAll').classList.toggle('active', user==='all');
+  document.getElementById('btnKishore').classList.toggle('active', user==='Kishore');
+  document.getElementById('btnDarshini').classList.toggle('active', user==='Darshini');
   applyFilters();
 }
 
 function toggleDateFilter(){
-  const panel = document.getElementById("dateFilterPanel");
-  panel.classList.toggle("open");
-  document.getElementById("btnDate").classList.toggle("active", panel.classList.contains("open"));
+  const panel = document.getElementById('dateFilterPanel');
+  panel.classList.toggle('open');
+  document.getElementById('btnDate').classList.toggle('active', panel.classList.contains('open'));
 }
 
 function applyFilters(){
   let filtered = [...allData];
-  if(activeUser !== "all") filtered = filtered.filter(i => i.person === activeUser);
-  const from  = document.getElementById("fromDate").value;
-  const to    = document.getElementById("toDate").value;
-  const month = document.getElementById("monthFilter").value;
+
+  if(activeUser !== 'all'){
+    filtered = filtered.filter(i => i.person === activeUser);
+  }
+
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate   = document.getElementById('toDate').value;
+  const month    = document.getElementById('monthFilter').value;
+
   if(month){
     filtered = filtered.filter(i => {
       const d = new Date(i.date);
-      return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0") === month;
+      const ym = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+      return ym === month;
     });
   } else {
-    if(from) filtered = filtered.filter(i => new Date(i.date) >= new Date(from));
-    if(to)   filtered = filtered.filter(i => new Date(i.date) <= new Date(to));
+    if(fromDate) filtered = filtered.filter(i => new Date(i.date) >= new Date(fromDate));
+    if(toDate)   filtered = filtered.filter(i => new Date(i.date) <= new Date(toDate));
   }
+
   renderTable(filtered);
 }
 
 function clearFilters(){
-  activeUser = "all";
-  ["fromDate","toDate","monthFilter"].forEach(id => document.getElementById(id).value = "");
-  document.getElementById("btnAll").classList.add("active");
-  document.getElementById("btnKishore").classList.remove("active");
-  document.getElementById("btnDarshini").classList.remove("active");
+  activeUser = 'all';
+  document.getElementById('fromDate').value = '';
+  document.getElementById('toDate').value   = '';
+  document.getElementById('monthFilter').value = '';
+  document.getElementById('btnAll').classList.add('active');
+  document.getElementById('btnKishore').classList.remove('active');
+  document.getElementById('btnDarshini').classList.remove('active');
   renderTable(allData);
 }
 
 loadTransactions();
 </script>
+
 </body>
 </html>
