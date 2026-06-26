@@ -60,6 +60,7 @@
           <th>Category</th>
           <th>Type</th>
           <th>Amount</th>
+          <th></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -77,6 +78,24 @@
 </div>
 
 <script>
+if(localStorage.getItem("financeLogin") !== "true") window.location.href = "login.html";
+
+// ── AUTO LOGOUT (1 minute inactivity) ──
+const AUTO_LOGOUT_MS = 60000;
+let autoLogoutTimer = null;
+function resetAutoLogout(){
+  clearTimeout(autoLogoutTimer);
+  autoLogoutTimer = setTimeout(function(){
+    const b = document.createElement("div");
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
+    b.textContent = "Session expired. Logging out...";
+    document.body.appendChild(b);
+    setTimeout(()=>{ localStorage.clear(); window.location.href="login.html"; }, 1500);
+  }, AUTO_LOGOUT_MS);
+}
+["click","touchstart","keydown","scroll","mousemove"].forEach(e => document.addEventListener(e, resetAutoLogout, true));
+resetAutoLogout();
+
 let allData = [];
 let activeUser = 'all';
 
@@ -114,22 +133,31 @@ async function loadTransactions(){
 function renderTable(data){
   let html = '';
   if(!data.length){
-    html = '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
+    html = '<tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:20px;">No transactions found</td></tr>';
   }
   data.forEach((item, idx) => {
     const hasExtra = (item.description && item.description.trim()) || item.payment;
     const chevron = hasExtra ? '<span class="row-chevron" id="chev-'+idx+'">▼</span>' : '';
+    const encoded = encodeURIComponent(JSON.stringify(item));
+    const chipCol = (item.person === 'Kishore') ? '#2563eb' : '#0891b2';
     html += `
       <tr class="txn-main-row ${hasExtra ? 'expandable' : ''}" onclick="${hasExtra ? 'toggleDetail('+idx+')' : ''}">
         <td>
-          <div class="txn-person-chip">${(item.person||'—').charAt(0)}</div>
-          ${formatDate(item.date)}
+          <div class="txn-date-cell">
+            <div class="txn-person-row">
+              <span class="txn-person-chip" style="background:${chipCol}">${(item.person||'—').charAt(0)}</span>
+              <span style="font-size:10px;color:#9ca3af;">${item.person||''}</span>
+            </div>
+            <span class="txn-date-line">${formatDate(item.date)}</span>
+          </div>
         </td>
-        <td>${item.category||item.type||'—'}</td>
+        <td style="font-size:12px;">${item.category||item.type||'—'}</td>
         <td>${typeBadge(item.type)}</td>
-        <td style="font-weight:700;">
-          ₹${Number(item.amount).toLocaleString()}
-          ${chevron}
+        <td style="font-weight:700;font-size:12px;white-space:nowrap;">
+          ₹${Number(item.amount).toLocaleString()} ${chevron}
+        </td>
+        <td>
+          <button class="edit-row-btn" onclick="event.stopPropagation();openEdit('${encoded}')" title="Edit">✏️</button>
         </td>
       </tr>`;
     if(hasExtra){
@@ -137,7 +165,7 @@ function renderTable(data){
       const pay  = item.payment || null;
       html += `
       <tr class="txn-detail-row" id="detail-${idx}" style="display:none;">
-        <td colspan="4">
+        <td colspan="5">
           <div class="txn-detail-box">
             ${pay  ? `<div class="detail-chip">💳 <strong>Payment:</strong> ${pay}</div>` : ''}
             ${desc ? `<div class="detail-chip">📝 <strong>Note:</strong> ${desc}</div>` : ''}
@@ -147,6 +175,12 @@ function renderTable(data){
     }
   });
   document.querySelector("#transactionTable tbody").innerHTML = html;
+}
+
+function openEdit(encoded){
+  const item = JSON.parse(decodeURIComponent(encoded));
+  localStorage.setItem("editTransaction", JSON.stringify(item));
+  window.location.href = "edit.html";
 }
 
 function toggleDetail(idx){

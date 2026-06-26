@@ -143,6 +143,24 @@
 </div>
 
 <script>
+if(localStorage.getItem("financeLogin") !== "true") window.location.href = "login.html";
+
+// ── AUTO LOGOUT ──
+const AUTO_LOGOUT_MS = 60000;
+let autoLogoutTimer = null;
+function resetAutoLogout(){
+  clearTimeout(autoLogoutTimer);
+  autoLogoutTimer = setTimeout(function(){
+    const b = document.createElement("div");
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
+    b.textContent = "Session expired. Logging out...";
+    document.body.appendChild(b);
+    setTimeout(()=>{ localStorage.clear(); window.location.href="login.html"; }, 1500);
+  }, AUTO_LOGOUT_MS);
+}
+["click","touchstart","keydown","scroll","mousemove"].forEach(e => document.addEventListener(e, resetAutoLogout, true));
+resetAutoLogout();
+
 let selectedType = 'Income';
 let selectedCategory = 'Salary';
 let selectedPayment = 'Cash';

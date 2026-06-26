@@ -872,3 +872,80 @@ display:flex;
 align-items:center;
 gap:4px;
 }
+
+/* ── TRANSACTION TABLE — MOBILE OPTIMISED ── */
+.txn-table-wrap table{
+width:100%;
+border-collapse:collapse;
+font-size:12px;
+table-layout:fixed;
+}
+
+.txn-table-wrap thead th:nth-child(1){ width:26%; }
+.txn-table-wrap thead th:nth-child(2){ width:28%; }
+.txn-table-wrap thead th:nth-child(3){ width:20%; }
+.txn-table-wrap thead th:nth-child(4){ width:20%; }
+.txn-table-wrap thead th:nth-child(5){ width:6%;  }
+
+.txn-date-cell{
+display:flex;
+flex-direction:column;
+gap:3px;
+}
+
+.txn-date-line{
+font-size:11px;
+font-weight:600;
+color:#374151;
+white-space:nowrap;
+}
+
+.txn-person-row{
+display:flex;
+align-items:center;
+gap:4px;
+}
+
+/* ── TRANSACTION EDIT BUTTON ── */
+.edit-row-btn{
+background:none;
+border:none;
+font-size:15px;
+cursor:pointer;
+padding:4px 6px;
+border-radius:8px;
+opacity:0.7;
+transition:opacity 0.2s,background 0.2s;
+}
+
+.edit-row-btn:active{
+background:#f3f4f6;
+opacity:1;
+}
+
+/* ── EDIT PAGE OWNER BADGE ── */
+.edit-owner-badge{
+background:white;
+border-radius:16px;
+padding:14px 16px;
+margin-bottom:18px;
+display:flex;
+align-items:center;
+gap:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+
+.owner-chip{
+width:32px;height:32px;
+border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:14px;font-weight:800;color:white;flex-shrink:0;
+}
+
+.owner-label{
+font-size:15px;font-weight:700;color:#111827;flex:1;
+}
+
+.owner-lock{
+font-size:11px;color:#9ca3af;font-weight:500;
+}

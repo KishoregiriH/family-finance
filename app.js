@@ -3,6 +3,29 @@ if(localStorage.getItem("financeLogin") !== "true"){
   window.location.href = "login.html";
 }
 
+// ── AUTO LOGOUT (1 minute inactivity) ──
+const AUTO_LOGOUT_MS = 60 * 1000;
+let autoLogoutTimer = null;
+function resetAutoLogout(){
+  clearTimeout(autoLogoutTimer);
+  autoLogoutTimer = setTimeout(function(){
+    const banner = document.createElement("div");
+    banner.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc2626;color:white;text-align:center;padding:14px;font-size:14px;font-weight:700;";
+    banner.textContent = "Session expired due to inactivity. Logging out...";
+    document.body.appendChild(banner);
+    setTimeout(function(){
+      localStorage.removeItem("financeLogin");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("skipLoading");
+      window.location.href = "login.html";
+    }, 1500);
+  }, AUTO_LOGOUT_MS);
+}
+["click","touchstart","keydown","scroll","mousemove"].forEach(function(evt){
+  document.addEventListener(evt, resetAutoLogout, true);
+});
+resetAutoLogout();
+
 // ── ON LOAD ──
 window.onload = async function(){
   handleLoadingScreen();
