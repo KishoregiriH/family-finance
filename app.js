@@ -104,48 +104,16 @@ function normaliseRow(t){
   };
 }
 
+let allTransactions = [];
+
 async function loadAllData(){
   try{
     const response = await fetch(
       "https://script.google.com/macros/s/AKfycbyr5Uu3r7hjsz2JHsFpvwzTyMAIAlU5gSVBAm2mznw7GYIHjeQllzT-9WCHMT-ZJL0u/exec?action=transactions"
     );
     const raw = await response.json();
-    const transactions = raw.map(normaliseRow);
-
-    const u1  = calcTotals(transactions, currentUser);
-    const u2  = calcTotals(transactions, otherUser);
-    const all = calcTotals(transactions, null);
-
-    document.getElementById("balance1").textContent        = fmt(u1.balance);
-    document.getElementById("balance2").textContent        = fmt(u2.balance);
-    document.getElementById("balanceCombined").textContent = fmt(all.balance);
-
-    document.getElementById("r1income").textContent  = fmt(u1.income);
-    document.getElementById("r1expense").textContent = fmt(u1.expense);
-    document.getElementById("r1saving").textContent  = fmt(u1.saving);
-    document.getElementById("r2income").textContent  = fmt(u2.income);
-    document.getElementById("r2expense").textContent = fmt(u2.expense);
-    document.getElementById("r2saving").textContent  = fmt(u2.saving);
-    document.getElementById("r3income").textContent  = fmt(all.income);
-    document.getElementById("r3expense").textContent = fmt(all.expense);
-    document.getElementById("r3saving").textContent  = fmt(all.saving);
-
-    // ── DATE RANGE on dashboard ──
-    const dates = transactions
-      .map(t => new Date(t.date))
-      .filter(d => !isNaN(d))
-      .sort((a,b) => a-b);
-    if(dates.length && document.getElementById("dashFromDate")){
-      document.getElementById("dashFromDate").textContent = fmtDate(dates[0]);
-      document.getElementById("dashToDate").textContent   = fmtDate(dates[dates.length-1]);
-    }
-
-    // Recent — current user last 5
-    const myTxns = transactions
-      .filter(t => t.person === currentUser)
-      .slice(-5).reverse();
-    renderRecentTransactions(myTxns);
-
+    allTransactions = raw.map(normaliseRow);
+    renderDashboard(allTransactions);
   } catch(error){
     console.error(error);
     if(document.getElementById("recentTransactions"))
@@ -154,6 +122,49 @@ async function loadAllData(){
   } finally {
     hideLoading();
   }
+}
+
+function applyDashFilter(){
+  const from  = document.getElementById("dashFromDate")?.value;
+  const to    = document.getElementById("dashToDate")?.value;
+  let filtered = [...allTransactions];
+  if(from) filtered = filtered.filter(t => new Date(t.date) >= new Date(from));
+  if(to)   filtered = filtered.filter(t => new Date(t.date) <= new Date(to));
+  renderDashboard(filtered);
+}
+
+function clearDashFilter(){
+  const f = document.getElementById("dashFromDate");
+  const t = document.getElementById("dashToDate");
+  if(f) f.value = "";
+  if(t) t.value = "";
+  renderDashboard(allTransactions);
+}
+
+function renderDashboard(transactions){
+  const u1  = calcTotals(transactions, currentUser);
+  const u2  = calcTotals(transactions, otherUser);
+  const all = calcTotals(transactions, null);
+
+  document.getElementById("balance1").textContent        = fmt(u1.balance);
+  document.getElementById("balance2").textContent        = fmt(u2.balance);
+  document.getElementById("balanceCombined").textContent = fmt(all.balance);
+
+  document.getElementById("r1income").textContent  = fmt(u1.income);
+  document.getElementById("r1expense").textContent = fmt(u1.expense);
+  document.getElementById("r1saving").textContent  = fmt(u1.saving);
+  document.getElementById("r2income").textContent  = fmt(u2.income);
+  document.getElementById("r2expense").textContent = fmt(u2.expense);
+  document.getElementById("r2saving").textContent  = fmt(u2.saving);
+  document.getElementById("r3income").textContent  = fmt(all.income);
+  document.getElementById("r3expense").textContent = fmt(all.expense);
+  document.getElementById("r3saving").textContent  = fmt(all.saving);
+
+  // Recent — current user last 5 from filtered set
+  const myTxns = transactions
+    .filter(t => t.person === currentUser)
+    .slice(-5).reverse();
+  renderRecentTransactions(myTxns);
 }
 
 const catIcons = {
