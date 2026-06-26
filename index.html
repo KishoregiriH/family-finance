@@ -30,17 +30,10 @@
   <h2 id="welcomeUser">👋 Good Morning</h2>
   <div class="overview-row">
     <p class="overview-label">Here's your financial overview</p>
-    <div class="dash-date-filter">
-      <div class="dash-date-field">
-        <span class="dash-date-label">From</span>
-        <input type="date" id="dashFromDate" onchange="applyDashFilter()">
-      </div>
-      <span class="dash-date-arrow">→</span>
-      <div class="dash-date-field">
-        <span class="dash-date-label">To</span>
-        <input type="date" id="dashToDate" onchange="applyDashFilter()">
-      </div>
-      <button class="dash-clear-btn" onclick="clearDashFilter()" title="Clear filter">✕</button>
+    <div class="date-range-badge">
+      <span id="dashFromDate">—</span>
+      <span class="date-sep">→</span>
+      <span id="dashToDate">—</span>
     </div>
   </div>
 </div>
